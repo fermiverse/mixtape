@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import uuidv4 from 'react-uuid';
 import casetteImage from '../graphics/casette.svg';
 
 
@@ -8,7 +9,9 @@ const authorize = async () => {
         params: {
             client_id: "8ce69e43f7bc4fc68b3197dc60f1a821",
             response_type: "token",
-            redirect_uri: "http://localhost:3000/"
+            redirect_uri: "https://affectionate-hopper-f81afb.netlify.app/",
+            scope: "user-read-private user-read-email",
+            state: uuidv4()
         }
     }).then(res => {
         console.log(res.data);
