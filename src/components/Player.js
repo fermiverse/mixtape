@@ -7,8 +7,9 @@ import Playlist from './Playlist';
 import Playbar from './Playbar';
 import spotifyIcon from '../graphics/spotify.svg';
 
-const getFragment = (qString) => {
+const getFragment = (qString, history) => {
     if (qString) {
+        if (qString.search("#access_token=") === -1) history.push("/");
         let startIndex = qString.indexOf("#") + "#access_token=".length;
         let endIndex = qString.indexOf("&token_type");
         if (startIndex && endIndex) return qString.slice(startIndex, endIndex);
@@ -64,7 +65,7 @@ const Player = () => {
     useEffect(() => {
         if (!isLoggedIn) {
             let qString = window.location.href;
-            let token = getFragment(qString)
+            let token = getFragment(qString, history);
             if (token) {
                 console.log(token);
                 accessToken = token;
@@ -85,12 +86,6 @@ const Player = () => {
             isLoggedIn = false;
         }
     }, []);
-
-    /*useEffect(() => {
-        if (!isLoggedIn && !user) {
-            history.push("/")
-        }
-    })*/
 
     return ( 
         <div className="pane" id="player">
