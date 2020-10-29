@@ -91,6 +91,7 @@ const Player = () => {
             {(isLoggedIn && user) ? (
                 <Persona user={user} history={history} showDescription={showDescription} toggleShowDescription={toggleShowDescription} />
             ) : null}
+            <p id="title">{pName}</p>
             {(isLoggedIn && user) ? (
                 <Playbar selectedTrack={selectedTrack} setSelectedTrack={setSelectedTrack} 
                 tracks={tracks} setTracks={setTracks} />

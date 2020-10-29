@@ -8,7 +8,7 @@ const Modal = ({pName, pDes, showDescription, toggleShowDescription, count}) => 
                 toggleShowDescription(false);
             }}></img>
             <h4 id={`pname`}>{pName}</h4>
-            <p id={`pdes`}>{pDes}</p>
+            <p id={`pdes`}>{pDes.slice(0, 80)}</p>
             <p id={`pcount`}>{`${count} tracks`}</p>
         </div>
     );
