@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Lottie from 'react-lottie';
 import heartIcon from '../graphics/love.svg';
 import filledHeartIcon from '../graphics/newlove.svg';
@@ -25,7 +25,7 @@ let timer = 0;
 let prevent = false;
 
 const Track = ({track, tracks, setTracks, selectedTrack, setSelectedTrack}) => {
-    const [liked, toggleLiked] = useState(track.liked ? track.liked : false);
+    
     const options = {
         loop: true,
         autoplay: true,
