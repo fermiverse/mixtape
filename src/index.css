@@ -20,6 +20,30 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  float: right;
+  display: none;
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgba(32, 32, 32, 0.1);
+  border-radius: 4px;
+  border: 1px solid white;
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(92, 92, 92);
+  border-radius: 4px;
+  display: none;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -40,7 +64,7 @@ body {
   align-items: center;
 }
 
-#pane {
+.pane {
   position: relative;
   min-width: 280px;
   max-width: 400px;
@@ -70,6 +94,7 @@ body {
   color: white;
   font-family: var(--primary-font);
   font-weight: 400;
+  transform: translateY(240px);
 }
 
 #spot:active, #spot:hover {
@@ -121,4 +146,163 @@ body {
     font-weight: 300;
     font-size: 13px;
   }
+}
+
+#mix {
+  transform: translateY(200px);
+}
+
+#persona {
+  position: relative;
+  width: 100%;
+  height: 60px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  background-color: black;
+  border: grey 1px solid;
+}
+
+#persona #exit {
+  position: absolute;
+  right: 20px;
+  cursor: pointer;
+}
+
+#round {
+  box-shadow: 0px 0px 5px rgb(160, 160, 160);
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  margin: 10px;
+}
+
+#user-info {
+  margin-left: 10px;
+}
+
+#user-info h4 {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+}
+
+#user-info p {
+  margin: 0;
+  padding: 0;
+  font-size: 12.5px;
+  color: grey;
+}
+
+#playlist {
+  position: relative;
+  width: 92%;
+  height: 400px;
+  border-radius: 12px;
+  border: black 5px solid;
+  margin-top: 20px;
+  padding: 2px;
+  background-color: rgb(36, 202, 36);
+  overflow-y: auto;
+}
+
+.track {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 80px;
+  border-radius: 5px;
+  background-color: black;
+  border: grey 1px solid;
+  padding: 10px;
+  margin-top: 2px;
+}
+
+.track:hover {
+  border: rgb(0, 0, 0) 2px solid;
+}
+
+.track .title {
+  max-width: 75%;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+}
+
+.track .artist {
+  max-width: 75%;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+  color: grey;
+}
+
+.track .duration {
+  max-width: 75%;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+  color: rgb(153, 109, 15);
+}
+
+.track img {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.track .playing {
+  position: absolute;
+  top: 13px;
+  right: 50px;
+}
+
+#playbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 90px;
+  width: 90%;
+  margin-top: 30px;
+}
+
+#playbar-empty {
+  height: 70px;
+  width: 90%;
+  margin-top: 40px;
+}
+
+#play-btns {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+  width: 200px;
+  margin-top: 20px;
+  margin-bottom: 5px;
+}
+
+#play-btn, #pause-btn {
+  margin-left: 5px;
+}
+
+#play-btn, #pause-btn, #prev-btn, #next-btn {
+  cursor: pointer;
+}
+
+#play-btn:hover, #pause-btn:hover, #prev-btn:hover, #next-btn:hover {
+  transform: scale(1.1);
+}
+
+#active-track {
+  margin-top: 10px;
+  color: rgb(235, 235, 235);
+  font-size: 13px;
+  max-width: 200px;
+  word-wrap: none;
+  white-space: nowrap;
+  height: 40px;
+  overflow: hidden;
 }
