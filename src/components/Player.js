@@ -86,6 +86,12 @@ const Player = () => {
         }
     }, []);
 
+    /*useEffect(() => {
+        if (!isLoggedIn && !user) {
+            history.push("/")
+        }
+    })*/
+
     return ( 
         <div className="pane" id="player">
             {(isLoggedIn && user) ? (

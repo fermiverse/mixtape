@@ -21,7 +21,7 @@ const authorize = () => {
         redirect_uri: "http://localhost:3000/play/",
         state: uuidv4()
     };
-    window.location = queryString(options);
+    window.location.href = queryString(options);
 };
 
 const Pane = () => {
