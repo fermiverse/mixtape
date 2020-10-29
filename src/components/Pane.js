@@ -10,6 +10,7 @@ const queryString = (options) => {
         + `&response_type=${response_type}`
         + `&redirect_uri=${redirect_uri}`
         + `&state=${state}`
+        + `&scope=user-read-email user-read-private playlist-modify-public playlist-modify-private`
     )
 }
 

@@ -21,6 +21,9 @@ const convertTime = (msTime) => {
     return `0:${secs}`
 }
 
+let timer = 0;
+let prevent = false;
+
 const Track = ({track, tracks, setTracks, selectedTrack, setSelectedTrack}) => {
     const [liked, toggleLiked] = useState(track.liked ? track.liked : false);
     const options = {
@@ -33,21 +36,42 @@ const Track = ({track, tracks, setTracks, selectedTrack, setSelectedTrack}) => {
     };
     return ( 
         <div className="track" onDoubleClick={() => {
-            toggleLiked(!liked);
+            clearTimeout(timer);
+            prevent = true;
+            let i = tracks.indexOf(track);
+            let newTracks = [...tracks];
+            newTracks.splice(i, 1, {...track, liked: track.liked ? false : true});
+            console.log(newTracks);
+            setTracks(newTracks);
         }} onClick={() => {
-            let isOn = selectedTrack.isPlaying;
-            setSelectedTrack({track: track, isPlaying: isOn});
+            timer = setTimeout(() => {
+                if (!prevent) {
+                    let isOn = selectedTrack.isPlaying;
+                    setSelectedTrack({track: track, isPlaying: isOn});
+                }
+                prevent = false;
+            }, 200);            
         }}>
             <p className="title">{track.name}</p>
             <p className="artist">{track.artists[0].name}</p>
             <p className="duration">{convertTime(track.duration_ms)}</p>
-            {liked ? (
-                <img src={filledHeartIcon} alt="heart" title="Like" width="20px" onClick={() => {
-                    toggleLiked(!liked);
+            {track.liked ? (
+                <img src={filledHeartIcon} alt="heart" title="Like" width="20px" onClick={(e) => {
+                    e.stopPropagation();
+                    let i = tracks.indexOf(track);
+                    let newTracks = [...tracks];
+                    newTracks.splice(i, 1, {...track, liked: track.liked ? false : true});
+                    console.log(newTracks);
+                    setTracks(newTracks);
                 }}></img>
             ) : (
-                <img src={heartIcon} alt="heart" title="Like" width="20px" onClick={() => {
-                    toggleLiked(!liked);
+                <img src={heartIcon} alt="heart" title="Like" width="20px" onClick={(e) => {
+                    e.stopPropagation();
+                    let i = tracks.indexOf(track);
+                    let newTracks = [...tracks];
+                    newTracks.splice(i, 1, {...track, liked: track.liked ? false : true});
+                    console.log(newTracks);
+                    setTracks(newTracks);
                 }}></img>
             )}
             {(selectedTrack && track.name === selectedTrack.track.name && selectedTrack.isPlaying) ? (
