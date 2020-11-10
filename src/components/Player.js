@@ -1,23 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Modal from './Modal';
+import Confirmation from './Confirmation';
 import axios from 'axios';
-import Persona from './Persona';
 import Playlist from './Playlist';
 import Playbar from './Playbar';
 import spotifyIcon from '../graphics/spotify.svg';
+import TopBar from './TopBar';
 
-const getFragment = (qString, history) => {
-    if (qString) {
-        if (qString.search("#access_token=") === -1) history.push("/");
-        let startIndex = qString.indexOf("#") + "#access_token=".length;
-        let endIndex = qString.indexOf("&token_type");
-        if (startIndex && endIndex) return qString.slice(startIndex, endIndex);
-    }
-    return null;
-};
-
-const exportToSpotify = async (id, token, name, description, tracks) => {
+const exportToSpotify = async (id, token, name, description, tracks, toggleShowConfirmation) => {
     console.log(id, token)
     await axios.post(`https://api.spotify.com/v1/users/${id}/playlists`, {
         name,
@@ -40,16 +31,15 @@ const exportToSpotify = async (id, token, name, description, tracks) => {
         })
         .then((res) => {
             console.log(res.data);
+            toggleShowConfirmation(true);
         })
         .catch((err) => {
             console.log(err);
         });
     })
     .catch(err => console.log(err));
-}
+};
 
-let isLoggedIn = false;
-let accessToken;
 
 const pName = require("../data/data.json").name;
 const pDes = require("../data/data.json").description;
@@ -57,58 +47,42 @@ const pDes = require("../data/data.json").description;
 
 const Player = () => {
     const [tracks, setTracks] = useState(require("../data/data.json").tracks);
-    const [user, setUser] = useState(null);
+    const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
+    const accessToken = localStorage.getItem("token") ? localStorage.getItem("token") : null;
     const [selectedTrack, setSelectedTrack] = useState({track: tracks[0], isPlaying: false});
     const [showDescription, toggleShowDescription] = useState(false);
+    const [showConfirmation, toggleShowConfirmation] = useState(false);
     const history = useHistory();
-    
+
     useEffect(() => {
-        if (!isLoggedIn) {
-            let qString = window.location.href;
-            let token = getFragment(qString, history);
-            if (token) {
-                console.log(token);
-                accessToken = token;
-                isLoggedIn = true;
-                axios.get(`https://api.spotify.com/v1/me`, {
-                    headers: {
-                        "Authorization": "Bearer " + token
-                    }
-                })
-                .then(res => {
-                    console.log(res.data);
-                    setUser(res.data);
-                })
-                .catch(err => console.log("Error retrieving user info ", err))               
-            }
-        }
-        return () => {
-            isLoggedIn = false;
-        }
+        if (window.location.href.search("#access_token=") === -1) history.push("/");
+    // eslint-disable-next-line
     }, []);
 
     return ( 
         <div className="pane" id="player">
-            {(isLoggedIn && user) ? (
-                <Persona user={user} history={history} showDescription={showDescription} toggleShowDescription={toggleShowDescription} />
+            {(user) ? (
+                <TopBar user={user} history={history} title={pName} showDescription={showDescription} toggleShowDescription={toggleShowDescription} />
             ) : null}
-            <p id="title">{pName}</p>
-            {(isLoggedIn && user) ? (
+            {(user) ? (
                 <Playbar selectedTrack={selectedTrack} setSelectedTrack={setSelectedTrack} 
                 tracks={tracks} setTracks={setTracks} />
             ) : (null)}
-            {(isLoggedIn && user) ? (
+            {(user) ? (
                 <Playlist user={user} token={accessToken} 
                 selectedTrack={selectedTrack} setSelectedTrack={setSelectedTrack} 
                 tracks={tracks} setTracks={setTracks} />
             ) : null}
             <div id="bottom-tray">
                 <img src={spotifyIcon} alt="spotify" id="spotify" title="Export to Spotify" width="35px" height="35px" onClick={() => {
-                    exportToSpotify(user.id, accessToken, pName, pDes, tracks);
+                    exportToSpotify(user.id, accessToken, pName, pDes, tracks, toggleShowConfirmation);
                 }}></img>
             </div>
             {showDescription ? (
                 <Modal pName={pName} pDes={pDes} showDescription={showDescription} toggleShowDescription={toggleShowDescription} count={tracks.length} />
+            ) : (null)}
+            {showConfirmation ? (
+                <Confirmation showConfirmation={showConfirmation} toggleShowConfirmation={toggleShowConfirmation} message={`Mixtape exported as playlist to Spotify`} />
             ) : (null)}
         </div>
     );

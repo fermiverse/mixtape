@@ -18,10 +18,10 @@ const authorize = () => {
     const options = {
         client_id: "8ce69e43f7bc4fc68b3197dc60f1a821",
         response_type: "token",
-        redirect_uri: "https://affectionate-hopper-f81afb.netlify.app/play/",
+        redirect_uri: "http://localhost:3000/menu/",
         state: uuidv4()
     };
-    window.location.href = queryString(options);
+    window.location = queryString(options);
 };
 
 const Pane = () => {
@@ -32,10 +32,11 @@ const Pane = () => {
                 <h1 id="main"><b>mixtape</b></h1>
                 <div id="msg">A fun way of celebrating equations</div>
             </div>
-            <img id="mix" src={casetteImage} alt="start" title="mixtape" width="80%"></img>
+            <img id="mix" src={casetteImage} alt="start" title="mixtape" width="65%"></img>
             <button id="spot" onClick={(e) => {
                 authorize();
             }}>Connect Spotify</button>
+            <p className="info">To use Mixtape, connect a valid Spotify account</p>
         </div>
     );
 }

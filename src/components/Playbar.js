@@ -4,6 +4,11 @@ import pauseIcon from '../graphics/pause.svg';
 import nextIcon from '../graphics/next.svg';
 import prevIcon from '../graphics/prev.svg';
 
+const fetchArtists = (track) => {
+    if (track && track.artists) return track.artists.map(artist => artist.name).join(", ");
+    return null;
+};
+
 const Playbar = ({selectedTrack, setSelectedTrack, tracks, setTracks}) => {
     return ( 
         <div id="playbar">
@@ -27,7 +32,7 @@ const Playbar = ({selectedTrack, setSelectedTrack, tracks, setTracks}) => {
                 }}></img>
             </div>
             <div id="active-track">
-                {`${selectedTrack.track.name} - ${selectedTrack.track.artists[0].name}`}
+                {`${selectedTrack.track.name} - ${fetchArtists(selectedTrack.track)}`}
             </div>
         </div>
     );
