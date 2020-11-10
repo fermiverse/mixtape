@@ -6,11 +6,16 @@ const frag = localStorage.getItem("frag");
 
 const Mixes = ({mixes}) => {
     const history = useHistory();
-    
+    console.log(mixes);
     return ( 
     <div className="mixes">
+        {mixes.map(mix => (
+            <div className="casette">
+                <img src={mix.cover} alt="cover" title={mix.name} className="sidetape"></img>
+            </div>
+        ))}
         <div className="casette">
-            <img src={addIcon} alt="add" title="Add a mix" width="50px" height="50px" onClick={() => {
+            <img src={addIcon} alt="add" title="Add a mix" width="45px" height="45px" onClick={() => {
                 history.push("/build" + frag);
             }}></img>
         </div>

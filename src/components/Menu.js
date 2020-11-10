@@ -43,6 +43,7 @@ const Menu = () => {
     const history = useHistory();
     const [showDescription, toggleShowDescription] = useState(false);
     const [user, setUser] = useState(null);
+    const [allMixes, setAllMixes] = useState([]);
     gsap.registerPlugin(Draggable);
     useEffect(() => {
         if (!isLoggedIn) {
@@ -66,6 +67,7 @@ const Menu = () => {
                     axios.get(`http://localhost:8081/users/${res.data.id}`).then((res) => {
                         if (res.data) {
                             console.log(res.data);
+                            if (res.data.user) setAllMixes(res.data.user.mixes);
                             localStorage.setItem("account", JSON.stringify(res.data));
                         } else registerUser(username, spotifyId);
                     }).catch(err => {
@@ -98,7 +100,7 @@ const Menu = () => {
                     history.push("/play" + frag)
                 }}>Player</p>
                 <p>My Mixes</p>
-                <Mixes />
+                <Mixes mixes={allMixes} />
             </div>
         </div>
     );
