@@ -22,7 +22,7 @@ const convertTime = (msTime) => {
 };
 
 const fetchArtists = (track) => {
-    if (track && track.artists) return track.artists.map(artist => artist.name).join(", ");
+    if (track && track.artists) return track.artists.join(", ");
     return null;
 };
 
@@ -30,7 +30,6 @@ let timer = 0;
 let prevent = false;
 
 const Track = ({track, tracks, setTracks, selectedTrack, setSelectedTrack}) => {
-    
     const options = {
         loop: true,
         autoplay: true,

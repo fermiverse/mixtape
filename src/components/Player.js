@@ -41,12 +41,14 @@ const exportToSpotify = async (id, token, name, description, tracks, toggleShowC
 };
 
 
-const pName = require("../data/data.json").name;
-const pDes = require("../data/data.json").description;
 
 
-const Player = () => {
-    const [tracks, setTracks] = useState(require("../data/data.json").tracks);
+
+const Player = ({mixProps, setMixProps}) => {
+
+    const pName = mixProps ? mixProps.name : null;
+    const pDes = mixProps ? mixProps.description : null;
+    const [tracks, setTracks] = useState(mixProps.tracks);
     const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
     const accessToken = localStorage.getItem("token") ? localStorage.getItem("token") : null;
     const [selectedTrack, setSelectedTrack] = useState({track: tracks[0], isPlaying: false});
@@ -62,7 +64,7 @@ const Player = () => {
     return ( 
         <div className="pane" id="player">
             {(user) ? (
-                <TopBar user={user} history={history} title={pName} showDescription={showDescription} toggleShowDescription={toggleShowDescription} />
+                <TopBar user={user} history={history} title={pName} showDescription={showDescription} toggleShowDescription={toggleShowDescription} retPath="/menu" />
             ) : null}
             {(user) ? (
                 <Playbar selectedTrack={selectedTrack} setSelectedTrack={setSelectedTrack} 

@@ -10,7 +10,7 @@ import TopBar from './TopBar';
 const addMix = async (currentMix, user) => {
     let retVal = false;
     await axios.post(`http://localhost:8081/users/${user.id}/mixes/add`, {mix: currentMix}).then((res) => {
-        console.log(res);
+        localStorage.removeItem("currentMix");
         retVal = true;
     }).catch((err) => {
         console.log(err);
@@ -45,9 +45,6 @@ const Mixtape = ({mixProps, setMixProps}) => {
     useEffect(() => {
         if (showLoader) {
             setTimeout(() => {
-                toggleShowLoader(false);
-            }, 3000);
-            setTimeout(() => {
                 history.push(returnPath("/menu"));
             }, 4000);
         }
@@ -69,8 +66,11 @@ const Mixtape = ({mixProps, setMixProps}) => {
                             name: user.display_name,
                             spotifyId: user.id
                         };
-                        addMix(currentMix, user);
-                        toggleShowLoader(true);
+                        if (addMix(currentMix, user)) toggleShowLoader(true);
+                        else {
+                            window.alert("Unable to ship :/");
+                            history.push("/");
+                        }
                     }
                 }}>Ship</button>
             )}

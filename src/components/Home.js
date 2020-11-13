@@ -10,7 +10,7 @@ const queryString = (options) => {
         + `&response_type=${response_type}`
         + `&redirect_uri=${redirect_uri}`
         + `&state=${state}`
-        + `&scope=user-read-email user-read-private playlist-modify-public playlist-modify-private`
+        + `&scope=streaming user-read-email user-read-private playlist-modify-public playlist-modify-private`
     )
 }
 
@@ -29,7 +29,7 @@ const Pane = () => {
     return ( 
         <div className="pane">
             <div style={{position: "absolute", top: "30px"}}>
-                <h1 id="main"><b>mixtape</b></h1>
+                <h1 id="main">mixtape</h1>
                 <div id="msg">A fun way of celebrating equations</div>
             </div>
             <img id="mix" src={casetteImage} alt="start" title="mixtape" width="65%"></img>

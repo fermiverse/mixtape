@@ -5,6 +5,8 @@ import axios from 'axios';
 import Persona from './Persona';
 import Mixes from './Mixes';
 import { Draggable } from 'gsap/all';
+import MixControls from './MixControls';
+import Error from './Error';
 
 const getFragment = (qString, history) => {
     if (qString) {
@@ -38,12 +40,13 @@ const registerUser = (name, spotifyId) => {
 let isLoggedIn = false;
 let frag;
 
-const Menu = () => {
+const Menu = ({mixProps, setMixProps}) => {
 
     const history = useHistory();
     const [showDescription, toggleShowDescription] = useState(false);
     const [user, setUser] = useState(null);
     const [allMixes, setAllMixes] = useState([]);
+    const [errorText, setErrorText] = useState("");
     gsap.registerPlugin(Draggable);
     useEffect(() => {
         if (!isLoggedIn) {
@@ -87,6 +90,14 @@ const Menu = () => {
     // eslint-disable-next-line
     }, [history]);
 
+    useEffect(() => {
+        if (errorText) {
+            setTimeout(() => {
+                setErrorText("");
+            }, 4000);
+        }
+    });
+
     return ( 
         <div className="pane" id="menu">
             {(isLoggedIn && user) ? (
@@ -99,8 +110,12 @@ const Menu = () => {
                 <p onClick={() => {
                     history.push("/play" + frag)
                 }}>Player</p>
-                <p>My Mixes</p>
-                <Mixes mixes={allMixes} />
+                <p>{`My Mixes (${allMixes ? allMixes.length : 0})`}</p>
+                <Mixes mixes={allMixes} mixProps={mixProps} setMixProps={setMixProps} allMixes={allMixes} setAllMixes={setAllMixes} />
+                <MixControls mixProps={mixProps} allMixes={allMixes} setAllMixes={setAllMixes} setErrorText={setErrorText} />
+                {errorText ? (
+                    <Error text={errorText} />
+                ) : (null)}
             </div>
         </div>
     );
