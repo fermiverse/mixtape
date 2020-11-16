@@ -45,7 +45,7 @@ const Search = ({mixProps, setMixProps}) => {
                     params: {
                         q: queryString(searchQuery),
                         type: filterString(["track"]),
-                        limit: 10
+                        limit: 25
                     }
                 }).then((res) => {
                     if (res.data && res.data.tracks) {
@@ -77,11 +77,12 @@ const Search = ({mixProps, setMixProps}) => {
             <button id="build" onClick={() => {
                 let currentMix = localStorage.getItem("currentMix") ? JSON.parse(localStorage.getItem("currentMix")) : {};
                 let selectedTracks = localStorage.getItem("selectedTracks") ? JSON.parse(localStorage.getItem("selectedTracks")) : [];
-                let account = localStorage.getItem("account") ? JSON.parse(localStorage.getItem("account")) : [];
+                let account = localStorage.getItem("account") ? JSON.parse(localStorage.getItem("account")) : {};
                 let frag = localStorage.getItem("frag") ? localStorage.getItem("frag") : "";
                 if (account && currentMix && selectedTracks) {
                     setMixProps({...currentMix, tracks: selectedTracks, id: "mix_" + uuid(), from: account});
-                    localStorage.setItem("currentMix", JSON.stringify({...currentMix, tracks: selectedTracks, id: "mix_" + uuid(), from: account}));
+                    if (currentMix.id) localStorage.setItem("currentMix", JSON.stringify({...currentMix, tracks: selectedTracks, from: {spotifyId: account.user.spotifyId}}));
+                    else localStorage.setItem("currentMix", JSON.stringify({...currentMix, tracks: selectedTracks, id: "mix_" + uuid(), from: {spotifyId: account.user.spotifyId}}));
                     history.push("/ship" + frag);
                 } else {
                     if (frag) history.push("/menu" + frag);

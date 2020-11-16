@@ -44,8 +44,9 @@ const Menu = ({mixProps, setMixProps}) => {
 
     const history = useHistory();
     const [showDescription, toggleShowDescription] = useState(false);
-    const [user, setUser] = useState(null);
     const [allMixes, setAllMixes] = useState([]);
+    const [selectedMix, setSelectedMix] = useState({});
+    const [account, setAccount] = useState(null);
     const [errorText, setErrorText] = useState("");
     gsap.registerPlugin(Draggable);
     useEffect(() => {
@@ -63,14 +64,16 @@ const Menu = ({mixProps, setMixProps}) => {
                 })
                 .then(res => {
                     console.log(res.data);
-                    setUser(res.data);
                     let username = res.data.display_name;
                     let spotifyId = res.data.id;
                     localStorage.setItem("user", JSON.stringify(res.data));
                     axios.get(`http://localhost:8081/users/${res.data.id}`).then((res) => {
                         if (res.data) {
                             console.log(res.data);
-                            if (res.data.user) setAllMixes(res.data.user.mixes);
+                            if (res.data.user) {
+                                setAllMixes(res.data.user.mixes);
+                                setAccount(res.data.user);
+                            }
                             localStorage.setItem("account", JSON.stringify(res.data));
                         } else registerUser(username, spotifyId);
                     }).catch(err => {
@@ -100,19 +103,28 @@ const Menu = ({mixProps, setMixProps}) => {
 
     return ( 
         <div className="pane" id="menu">
-            {(isLoggedIn && user) ? (
-                <Persona user={user} history={history} showDescription={showDescription} toggleShowDescription={toggleShowDescription} isPlayer={false} />
+            {(isLoggedIn && account) ? (
+                <Persona user={account} history={history} showDescription={showDescription} toggleShowDescription={toggleShowDescription} isPlayer={false} />
             ) : null}
             <div id="menu-list">
                 <p onClick={() => {
-                    history.push("/search" + frag)
+                    history.push("/search" + frag);
                 }}>Search</p>
+                {/*<p onClick={() => {
+                    if (selectedMix) {
+                        setMixProps(selectedMix);
+                        history.push("/play" + frag);
+                    } else {
+                        if (allMixes && allMixes.length) setErrorText("First, tap on a mix to select it.");
+                        else setErrorText("No mixes to play. Add one first.");
+                    }
+                }}>Player</p>*/}
                 <p onClick={() => {
-                    history.push("/play" + frag)
-                }}>Player</p>
+                    history.push("/profile" + frag);
+                }}>My Profile</p>
                 <p>{`My Mixes (${allMixes ? allMixes.length : 0})`}</p>
-                <Mixes mixes={allMixes} mixProps={mixProps} setMixProps={setMixProps} allMixes={allMixes} setAllMixes={setAllMixes} />
-                <MixControls mixProps={mixProps} allMixes={allMixes} setAllMixes={setAllMixes} setErrorText={setErrorText} />
+                <Mixes mixes={allMixes} selectedMix={selectedMix} setSelectedMix={setSelectedMix} allMixes={allMixes} setAllMixes={setAllMixes} setMixProps={setMixProps} />
+                <MixControls selectedMix={selectedMix} setMixProps={setMixProps} allMixes={allMixes} setAllMixes={setAllMixes} setErrorText={setErrorText} />
                 {errorText ? (
                     <Error text={errorText} />
                 ) : (null)}

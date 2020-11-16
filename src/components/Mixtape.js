@@ -2,19 +2,21 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Lottie from 'react-lottie';
 import { useHistory } from 'react-router-dom';
-import loadLottie from '../graphics/heart.json';
+import loadLottie from '../graphics/avocado.json';
 import SearchResults from './SearchResults';
 import Tape from './Tape';
 import TopBar from './TopBar';
 
 const addMix = async (currentMix, user) => {
     let retVal = false;
-    await axios.post(`http://localhost:8081/users/${user.id}/mixes/add`, {mix: currentMix}).then((res) => {
+    await axios.post(`http://localhost:8081/users/${user.id}/mixes/add`, {mix: currentMix, update: true}).then((res) => {
         localStorage.removeItem("currentMix");
+        localStorage.removeItem("selectedTracks");
         retVal = true;
     }).catch((err) => {
         console.log(err);
     });
+    console.log(currentMix)
     return retVal;
 };
 
@@ -46,7 +48,7 @@ const Mixtape = ({mixProps, setMixProps}) => {
         if (showLoader) {
             setTimeout(() => {
                 history.push(returnPath("/menu"));
-            }, 4000);
+            }, 4500);
         }
     }, [showLoader, history]);
 
@@ -66,7 +68,10 @@ const Mixtape = ({mixProps, setMixProps}) => {
                             name: user.display_name,
                             spotifyId: user.id
                         };
-                        if (addMix(currentMix, user)) toggleShowLoader(true);
+                        if (addMix(currentMix, user)) {
+                            setMixProps({});
+                            toggleShowLoader(true);
+                        }
                         else {
                             window.alert("Unable to ship :/");
                             history.push("/");
@@ -75,7 +80,7 @@ const Mixtape = ({mixProps, setMixProps}) => {
                 }}>Ship</button>
             )}
             {showLoader && (
-                <div className="loader">
+                <div className="loader" style={{marginTop: "100px"}}>
                     <Lottie options={options} width="200px" height="auto" />
                 </div>
             )}

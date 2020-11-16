@@ -5,6 +5,7 @@ import Menu from './components/Menu';
 import MixForm from './components/MixForm';
 import Mixtape from './components/Mixtape';
 import Player from './components/Player';
+import Profile from './components/Profile';
 import Search from './components/Search';
 
 function App() {
@@ -30,6 +31,9 @@ function App() {
           )} />
           <Route exact path="/ship" render={(props) => (
             <Mixtape {...props} mixProps={mixProps} setMixProps={setMixProps} />
+          )} />
+          <Route exact path="/profile" render={(props) => (
+            <Profile {...props} mixProps={mixProps} setMixProps={setMixProps} />
           )} />
           <Redirect from="*" to="/"></Redirect>
         </Switch>

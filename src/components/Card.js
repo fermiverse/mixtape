@@ -20,9 +20,18 @@ const convertTime = (msTime) => {
 };
 
 const getArtists = (track, outputString = false) => {
-    if (track.artists && track.artists[0].name) return track.artists.map(artist => artist.name).join(", ");
-    if (outputString) return track.artists.join(", ");
-    return track.artists.map(artist => artist.name);
+    console.log(track)
+    if (track.artists) {
+        if (track.artists && track.artists[0].name) {
+            if (outputString) return track.artists.map(artist => artist.name).join(", ");
+            else return track.artists.map(artist => artist.name);
+        }
+        if (outputString) {
+            return track.artists.join(", ");
+        }
+        return track.artists.map(artist => artist.name);
+    }
+    return "";
 };
 
 const isAdded = (uri) => {
