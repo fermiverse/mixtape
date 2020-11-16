@@ -19,13 +19,17 @@ const convertTime = (msTime) => {
         return `${mins}:${secs}`
     }
     return `0:${secs}`
-}
+};
+
+const fetchArtists = (track) => {
+    if (track && track.artists) return track.artists.join(", ");
+    return null;
+};
 
 let timer = 0;
 let prevent = false;
 
 const Track = ({track, tracks, setTracks, selectedTrack, setSelectedTrack}) => {
-    
     const options = {
         loop: true,
         autoplay: true,
@@ -41,7 +45,6 @@ const Track = ({track, tracks, setTracks, selectedTrack, setSelectedTrack}) => {
             let i = tracks.indexOf(track);
             let newTracks = [...tracks];
             newTracks.splice(i, 1, {...track, liked: track.liked ? false : true});
-            console.log(newTracks);
             setTracks(newTracks);
         }} onClick={() => {
             timer = setTimeout(() => {
@@ -53,7 +56,7 @@ const Track = ({track, tracks, setTracks, selectedTrack, setSelectedTrack}) => {
             }, 200);            
         }}>
             <p className="title">{track.name}</p>
-            <p className="artist">{track.artists[0].name}</p>
+            <p className="artist">{fetchArtists(track)}</p>
             <p className="duration">{convertTime(track.duration_ms)}</p>
             {track.liked ? (
                 <img src={filledHeartIcon} alt="heart" title="Like" width="20px" onClick={(e) => {
@@ -61,7 +64,6 @@ const Track = ({track, tracks, setTracks, selectedTrack, setSelectedTrack}) => {
                     let i = tracks.indexOf(track);
                     let newTracks = [...tracks];
                     newTracks.splice(i, 1, {...track, liked: track.liked ? false : true});
-                    console.log(newTracks);
                     setTracks(newTracks);
                 }}></img>
             ) : (
@@ -70,7 +72,6 @@ const Track = ({track, tracks, setTracks, selectedTrack, setSelectedTrack}) => {
                     let i = tracks.indexOf(track);
                     let newTracks = [...tracks];
                     newTracks.splice(i, 1, {...track, liked: track.liked ? false : true});
-                    console.log(newTracks);
                     setTracks(newTracks);
                 }}></img>
             )}
