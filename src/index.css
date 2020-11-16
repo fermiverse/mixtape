@@ -233,6 +233,10 @@ body {
   overflow: hidden;
 }
 
+#round:hover {
+  transform: scale(1.06);
+}
+
 #round img {
   cursor: pointer;
 }
