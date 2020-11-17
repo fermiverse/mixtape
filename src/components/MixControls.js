@@ -12,7 +12,7 @@ const deleteMix = (mix, account) => {
         if (account && account.user && account.user.spotifyId) {
             let conf = window.confirm(`Delete ${mix.name} permanently?`);
             if (conf) {
-                axios.post(`http://localhost:8081/users/${account.user.spotifyId}/mixes/delete`, {mix: mix}).then((res) => {
+                axios.post(`http://mixtapeservice-env.eba-vhy557sq.us-west-2.elasticbeanstalk.com/users/${account.user.spotifyId}/mixes/delete`, {mix: mix}).then((res) => {
                     console.log(res)
                     retVal = true;
                 }).catch(err => {

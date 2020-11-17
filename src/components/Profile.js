@@ -17,7 +17,7 @@ const getColours = (index) => {
 
 const updateUser = async (formData, spotifyId) => {
     let retVal = false;
-    await axios.post(`http://localhost:8081/users/${spotifyId}/update`, {
+    await axios.post(`http://mixtapeservice-env.eba-vhy557sq.us-west-2.elasticbeanstalk.com/users/${spotifyId}/update`, {
         name: formData.name,
         genres: formData.genres,
         description: formData.description,

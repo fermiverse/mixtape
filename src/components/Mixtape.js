@@ -9,7 +9,7 @@ import TopBar from './TopBar';
 
 const addMix = async (currentMix, user) => {
     let retVal = false;
-    await axios.post(`http://localhost:8081/users/${user.id}/mixes/add`, {mix: currentMix, update: true}).then((res) => {
+    await axios.post(`http://mixtapeservice-env.eba-vhy557sq.us-west-2.elasticbeanstalk.com/users/${user.id}/mixes/add`, {mix: currentMix, update: true}).then((res) => {
         localStorage.removeItem("currentMix");
         localStorage.removeItem("selectedTracks");
         retVal = true;
