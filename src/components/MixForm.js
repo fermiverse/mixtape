@@ -56,7 +56,12 @@ const MixForm = ({mixProps, setMixProps}) => {
                     <label>Cover Image</label>
                     <input type="text" id="mixCover" name="mixCover" spellCheck="false" 
                     placeholder="Paste a link to a cover image..." style={{color: "rgb(31, 140, 184)"}}
-                    autoComplete="off" value={mixProps.cover} onChange={(e) => {
+                    autoComplete="off" value={mixProps.cover} onFocus={() => {
+                        let thisElem = document.getElementById("mixCover");
+                        thisElem.select();
+                    }} onMouseUp={() => {
+                        return false
+                    }} onChange={(e) => {
                         setMixProps({...mixProps, cover: e.target.value});
                     }}></input>
                     <div className="img-container">
