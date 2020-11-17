@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import gsap from 'gsap/gsap-core';
 import axios from 'axios';
 import Persona from './Persona';
 import Mixes from './Mixes';
-import { Draggable } from 'gsap/all';
 import MixControls from './MixControls';
 import Error from './Error';
 
@@ -48,7 +46,7 @@ const Menu = ({mixProps, setMixProps}) => {
     const [selectedMix, setSelectedMix] = useState({});
     const [account, setAccount] = useState(null);
     const [errorText, setErrorText] = useState("");
-    gsap.registerPlugin(Draggable);
+    
     useEffect(() => {
         if (!isLoggedIn) {
             let qString = window.location.href;

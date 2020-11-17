@@ -1,5 +1,3 @@
-import { Draggable } from 'gsap/all';
-import gsap from 'gsap/gsap-core';
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import TopBar from './TopBar';
@@ -18,13 +16,6 @@ const MixForm = ({mixProps, setMixProps}) => {
         if (localStorage.getItem("user") === null || 
         localStorage.getItem("account") === null || 
         window.location.href.search("#access_token=") === -1) history.push("/");
-        
-        Draggable.create("#cover-img", {
-            type: "x,y",
-            bounds: ".img-container",
-            edgeResistance: 0.5
-        });
-        gsap.registerPlugin(Draggable);
     // eslint-disable-next-line
     }, []);
     
