@@ -59,6 +59,8 @@ const MixControls = ({selectedMix, setMixProps, allMixes, setAllMixes, setErrorT
             <button className="blank" title="Play mix" onClick={(e) => {
                 if (selectedMix.name) {
                     setMixProps(selectedMix);
+                    if (frag) history.push("/play" + frag);
+                    else history.push("/");
                 } else {
                     setErrorText("First, tap on a mix to select it");
                 }
