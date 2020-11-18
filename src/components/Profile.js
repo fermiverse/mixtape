@@ -8,6 +8,7 @@ import loadLottie from '../graphics/done.json';
 import uuid from 'react-uuid';
 import axios from 'axios';
 import Lottie from 'react-lottie';
+import { SERVER_URL } from '../constants/Base';
 
 const getColours = (index) => {
     let colours = ["rgb(68, 37, 194)", "rgb(64, 18, 252)", "rgb(35, 0, 176)", "rgb(13, 85, 255)", 
@@ -17,7 +18,7 @@ const getColours = (index) => {
 
 const updateUser = async (formData, spotifyId) => {
     let retVal = false;
-    await axios.post(`http://mixtapeservice-env.eba-vhy557sq.us-west-2.elasticbeanstalk.com/users/${spotifyId}/update`, {
+    await axios.post(`${SERVER_URL}users/${spotifyId}/update`, {
         name: formData.name,
         genres: formData.genres,
         description: formData.description,

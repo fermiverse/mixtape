@@ -18,7 +18,7 @@ const authorize = () => {
     const options = {
         client_id: "8ce69e43f7bc4fc68b3197dc60f1a821",
         response_type: "token",
-        redirect_uri: "https://www.fermiverse.com/menu/",
+        redirect_uri: "https://make-a-mixtape.netlify.app/menu/",
         state: uuidv4()
     };
     window.location = queryString(options);

@@ -6,10 +6,11 @@ import loadLottie from '../graphics/avocado.json';
 import SearchResults from './SearchResults';
 import Tape from './Tape';
 import TopBar from './TopBar';
+import { SERVER_URL } from '../constants/Base';
 
 const addMix = async (currentMix, user) => {
     let retVal = false;
-    await axios.post(`http://mixtapeservice-env.eba-vhy557sq.us-west-2.elasticbeanstalk.com/users/${user.id}/mixes/add`, {mix: currentMix, update: true}).then((res) => {
+    await axios.post(`${SERVER_URL}users/${user.id}/mixes/add`, {mix: currentMix, update: true}).then((res) => {
         localStorage.removeItem("currentMix");
         localStorage.removeItem("selectedTracks");
         retVal = true;

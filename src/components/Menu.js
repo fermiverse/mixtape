@@ -5,6 +5,7 @@ import Persona from './Persona';
 import Mixes from './Mixes';
 import MixControls from './MixControls';
 import Error from './Error';
+import { SERVER_URL } from '../constants/Base';
 
 const getFragment = (qString, history) => {
     if (qString) {
@@ -20,7 +21,7 @@ const getFragment = (qString, history) => {
 };
 
 const registerUser = (name, spotifyId) => {
-    axios.post(`http://mixtapeservice-env.eba-vhy557sq.us-west-2.elasticbeanstalk.com/users/create`, {
+    axios.post(`${SERVER_URL}users/create`, {
         name,
         spotifyId
     }).then((res) => {
@@ -65,7 +66,7 @@ const Menu = ({mixProps, setMixProps}) => {
                     let username = res.data.display_name;
                     let spotifyId = res.data.id;
                     localStorage.setItem("user", JSON.stringify(res.data));
-                    axios.get(`http://mixtapeservice-env.eba-vhy557sq.us-west-2.elasticbeanstalk.com/users/${res.data.id}`).then((res) => {
+                    axios.get(`${SERVER_URL}users/${res.data.id}`).then((res) => {
                         if (res.data) {
                             console.log(res.data);
                             if (res.data.user) {

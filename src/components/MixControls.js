@@ -5,6 +5,7 @@ import deleteIcon from '../graphics/delete.svg';
 import shareIcon from '../graphics/share.svg';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import { SERVER_URL } from '../constants/Base';
 
 const deleteMix = (mix, account) => {
     let retVal = false;
@@ -12,7 +13,7 @@ const deleteMix = (mix, account) => {
         if (account && account.user && account.user.spotifyId) {
             let conf = window.confirm(`Delete ${mix.name} permanently?`);
             if (conf) {
-                axios.post(`http://mixtapeservice-env.eba-vhy557sq.us-west-2.elasticbeanstalk.com/users/${account.user.spotifyId}/mixes/delete`, {mix: mix}).then((res) => {
+                axios.post(`${SERVER_URL}users/${account.user.spotifyId}/mixes/delete`, {mix: mix}).then((res) => {
                     console.log(res)
                     retVal = true;
                 }).catch(err => {
