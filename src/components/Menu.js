@@ -7,6 +7,7 @@ import Mixes from './Mixes';
 import MixControls from './MixControls';
 import Error from './Error';
 import loadLottie from '../graphics/appLoader.json';
+import { SERVER_URL } from '../constants/Base';
 
 const getFragment = (qString, history) => {
     if (qString) {
@@ -65,7 +66,7 @@ const Menu = ({mixProps, setMixProps}) => {
             let qString = window.location.href;
             let token = getFragment(qString, history);
             if (token) {
-                console.log(token);
+                if (!loggedIn) localStorage.setItem("isLoggedIn", "true");
                 localStorage.setItem("token", token);
                 isLoggedIn = true;
                 axios.get(`https://api.spotify.com/v1/me`, {
@@ -96,7 +97,6 @@ const Menu = ({mixProps, setMixProps}) => {
                     console.log("Unable to fetch user: ", err);
                     history.push("/");
                 });      
-                if (!loggedIn) localStorage.setItem("isLoggedIn", "true");
             }
         }
         return () => {
