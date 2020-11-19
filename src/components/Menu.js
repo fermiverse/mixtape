@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import gsap from 'gsap/gsap-core';
+import Lottie from 'react-lottie';
 import axios from 'axios';
 import Persona from './Persona';
 import Mixes from './Mixes';
-import { Draggable } from 'gsap/all';
 import MixControls from './MixControls';
 import Error from './Error';
+import loadLottie from '../graphics/appLoader.json';
 
 const getFragment = (qString, history) => {
     if (qString) {
@@ -42,13 +42,24 @@ let frag;
 
 const Menu = ({mixProps, setMixProps}) => {
 
+    const options = {
+        loop: true,
+        autoplay: true,
+        animationData: loadLottie,
+        rendererSettings: {
+          preserveAspectRatio: "xMidYMid slice"
+        }
+    };
+
+    let loggedIn = localStorage.getItem("isLoggedIn");
     const history = useHistory();
     const [showDescription, toggleShowDescription] = useState(false);
     const [allMixes, setAllMixes] = useState([]);
     const [selectedMix, setSelectedMix] = useState({});
     const [account, setAccount] = useState(null);
     const [errorText, setErrorText] = useState("");
-    gsap.registerPlugin(Draggable);
+    const [showLoader, toggleShowLoader] = useState(loggedIn === "true" ? false : true);
+    
     useEffect(() => {
         if (!isLoggedIn) {
             let qString = window.location.href;
@@ -85,6 +96,7 @@ const Menu = ({mixProps, setMixProps}) => {
                     console.log("Unable to fetch user: ", err);
                     history.push("/");
                 });      
+                if (!loggedIn) localStorage.setItem("isLoggedIn", "true");
             }
         }
         return () => {
@@ -101,34 +113,39 @@ const Menu = ({mixProps, setMixProps}) => {
         }
     });
 
+    useEffect(() => {
+        if (showLoader) {
+            setTimeout(() => {
+                toggleShowLoader(false);
+            }, 4000);
+        }
+    });
+
     return ( 
         <div className="pane" id="menu">
-            {(isLoggedIn && account) ? (
+            {(isLoggedIn && account && !showLoader) ? (
                 <Persona user={account} history={history} showDescription={showDescription} toggleShowDescription={toggleShowDescription} isPlayer={false} />
             ) : null}
-            <div id="menu-list">
-                <p onClick={() => {
-                    history.push("/search" + frag);
-                }}>Search</p>
-                {/*<p onClick={() => {
-                    if (selectedMix) {
-                        setMixProps(selectedMix);
-                        history.push("/play" + frag);
-                    } else {
-                        if (allMixes && allMixes.length) setErrorText("First, tap on a mix to select it.");
-                        else setErrorText("No mixes to play. Add one first.");
-                    }
-                }}>Player</p>*/}
-                <p onClick={() => {
-                    history.push("/profile" + frag);
-                }}>My Profile</p>
-                <p>{`My Mixes (${allMixes ? allMixes.length : 0})`}</p>
-                <Mixes mixes={allMixes} selectedMix={selectedMix} setSelectedMix={setSelectedMix} allMixes={allMixes} setAllMixes={setAllMixes} setMixProps={setMixProps} />
-                <MixControls selectedMix={selectedMix} setMixProps={setMixProps} allMixes={allMixes} setAllMixes={setAllMixes} setErrorText={setErrorText} />
-                {errorText ? (
-                    <Error text={errorText} />
-                ) : (null)}
-            </div>
+            {showLoader ? (
+                <div className="loader" style={{marginTop: "200px"}}>
+                    <Lottie options={options} width="330px" height="auto" />
+                </div>
+            ) : (
+                <div id="menu-list">
+                    <p onClick={() => {
+                        history.push("/search" + frag);
+                    }}>Search</p>
+                    <p onClick={() => {
+                        history.push("/profile" + frag);
+                    }}>My Profile</p>
+                    <p>{`My Mixes (${allMixes ? allMixes.length : 0})`}</p>
+                    <Mixes mixes={allMixes} selectedMix={selectedMix} setSelectedMix={setSelectedMix} allMixes={allMixes} setAllMixes={setAllMixes} setMixProps={setMixProps} />
+                    <MixControls selectedMix={selectedMix} setMixProps={setMixProps} allMixes={allMixes} setAllMixes={setAllMixes} setErrorText={setErrorText} />
+                    {errorText ? (
+                        <Error text={errorText} />
+                    ) : (null)}
+                </div>
+            )}
         </div>
     );
 }
