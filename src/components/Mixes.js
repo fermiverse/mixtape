@@ -8,6 +8,8 @@ const frag = localStorage.getItem("frag");
 
 const Mixes = ({mixes, selectedMix, setSelectedMix, setMixProps}) => {
     const history = useHistory();
+    let revMixes = [...mixes];
+    revMixes.reverse();
  
     return ( 
     <div className="mixes">
@@ -22,7 +24,7 @@ const Mixes = ({mixes, selectedMix, setSelectedMix, setMixProps}) => {
             }}>
             <img src={addIcon} alt="add" title="Add a mix" width="45px" height="45px"></img>
         </div>
-        {mixes.map(mix => (
+        {revMixes.map(mix => (
             <div className={mix.id === selectedMix.id ? "selected-casette" : "casette"} key={uuid()} onClick={() => {
                 localStorage.setItem("currentMix", JSON.stringify(mix));
                 localStorage.setItem("selectedTracks", JSON.stringify(mix.tracks));

@@ -5,7 +5,10 @@ import nextIcon from '../graphics/next.svg';
 import prevIcon from '../graphics/prev.svg';
 
 const fetchArtists = (track) => {
-    if (track && track.artists) return track.artists.map(artist => artist.name).join(", ");
+    if (track && track.artists) {
+        if (track.artists[0].name) return track.artists.map(artist => artist.name).join(", ");
+        else return track.artists.join(", ");
+    }
     return null;
 };
 

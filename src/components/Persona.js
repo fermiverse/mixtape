@@ -26,6 +26,7 @@ const Persona = ({user, history}) => {
                 <p>{user.description ? user.description.substring(0, 30) : "Special person"}</p>
             </div>
             <img id="exit" src={exitIcon} alt="exit" title="Logout" width="20px" height="20px" onClick={() => {
+                window.localStorage.clear();
                 history.push("/");
             }}></img>
         </div>
