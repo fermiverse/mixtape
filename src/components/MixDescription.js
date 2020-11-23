@@ -4,7 +4,8 @@ const getAllArtists = (mix, limit=3) => {
     let tracks = mix.tracks;
     if (tracks && tracks.length) {
         let artistArr = tracks.map(track => track.artists).flat();
-        let artistArrShort = artistArr.slice(0, limit < artistArr.length ? limit : artistArr.length);
+        let uartistArr = [...new Set(artistArr)];
+        let artistArrShort = uartistArr.slice(0, limit < uartistArr.length ? limit : uartistArr.length);
         return artistArrShort.join(", ")
     }
     return "";

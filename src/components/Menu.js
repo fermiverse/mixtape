@@ -5,8 +5,12 @@ import axios from 'axios';
 import Persona from './Persona';
 import Mixes from './Mixes';
 import MixControls from './MixControls';
+import Confirmation from './Confirmation';
 import Error from './Error';
 import loadLottie from '../graphics/appLoader.json';
+import copyIcon from '../graphics/copyIcon.svg';
+import embedIcon from '../graphics/embed.svg';
+import closeIcon from '../graphics/cancel.svg';
 
 const getFragment = (qString, history) => {
     if (qString) {
@@ -59,6 +63,25 @@ const Menu = ({mixProps, setMixProps}) => {
     const [account, setAccount] = useState(null);
     const [errorText, setErrorText] = useState("");
     const [showLoader, toggleShowLoader] = useState(loggedIn === "true" ? false : true);
+    const [shareLink, setShareLink] = useState(null);
+    const [embedLink, setEmbedLink] = useState("");
+    const [showPanel, toggleShowPanel] = useState(false);
+    const [showConfirmation, toggleShowConfirmation] = useState(false);
+
+    const processEmbed = async (url, spotifyId) => {
+        let urlObj = new URL(url);
+        if ((urlObj.hostname === "api.fermiverse.com" || urlObj.hostname === "localhost") && urlObj.pathname === "/sharing") {
+            let newUrl = url + `&to=${spotifyId}`;
+            await axios.get(newUrl).then((res) => {
+                toggleShowPanel(false);
+                toggleShowConfirmation(true);
+                setAccount({...account});
+            }).catch((err) => {
+                console.log(err);
+                setErrorText("Unable to add mix");
+            });
+        } else setErrorText("Invalid embed url");
+    };
     
     useEffect(() => {
         if (!isLoggedIn) {
@@ -133,16 +156,58 @@ const Menu = ({mixProps, setMixProps}) => {
             ) : (
                 <div id="menu-list">
                     <p onClick={() => {
+                        localStorage.removeItem("selectedTracks");
+                        setMixProps({});
                         history.push("/search" + frag);
                     }}>Search</p>
                     <p onClick={() => {
                         history.push("/profile" + frag);
                     }}>My Profile</p>
                     <p>{`My Mixes (${allMixes ? allMixes.length : 0})`}</p>
-                    <Mixes mixes={allMixes} selectedMix={selectedMix} setSelectedMix={setSelectedMix} allMixes={allMixes} setAllMixes={setAllMixes} setMixProps={setMixProps} />
-                    <MixControls selectedMix={selectedMix} setMixProps={setMixProps} allMixes={allMixes} setAllMixes={setAllMixes} setErrorText={setErrorText} />
+                    <Mixes mixes={allMixes} selectedMix={selectedMix} setSelectedMix={setSelectedMix} 
+                    allMixes={allMixes} setAllMixes={setAllMixes} setMixProps={setMixProps} toggleShowPanel={toggleShowPanel} />
+                    <MixControls selectedMix={selectedMix} setMixProps={setMixProps} allMixes={allMixes} 
+                    setAllMixes={setAllMixes} setErrorText={setErrorText} setShareLink={setShareLink}
+                    setEmbedLink={setEmbedLink} spotifyId={account ? account.spotifyId : null} />
                     {errorText ? (
                         <Error text={errorText} />
+                    ) : (null)}
+                    {shareLink ? (
+                        <div className="sharing">
+                            {shareLink.slice(0, 46) + ".."}
+                            <img src={copyIcon} alt="copy" width="17px" height="auto" onClick={() => {
+                                navigator.clipboard.writeText(shareLink).then(() => {
+                                    setErrorText("Copied to clipboard");
+                                }).then(() => {
+                                    setTimeout(() => {
+                                        setShareLink(null);
+                                    }, 3000);
+                                }).catch((err) => {
+                                    console.log(err);
+                                })
+                            }}></img>
+                        </div>
+                    ) : (null)}
+                    {showPanel ? (
+                        <div id="panel" style={{height: "250px"}}>
+                            <img src={closeIcon} className="close" alt="close" title="Close" width="20px" height="20px" onClick={() => {
+                                toggleShowPanel(false);
+                            }}></img>
+                            <input type="text" id="embed-bar" required={true} spellCheck={false} autoComplete="off" placeholder="Paste an embed link.." value={embedLink} onChange={(e) => {
+                                setEmbedLink(e.target.value);
+                            }} />
+                            <img src={embedIcon} id="embed" alt="embed" width="24px" height="24px" title="Import mix" onClick={() => {
+                                if (embedLink && account && account.spotifyId) processEmbed(embedLink, account.spotifyId);
+                            }}></img>
+                            <p style={{color: "black"}}>OR</p>
+                            <button id="buildMix" onClick={() => {
+                                if (frag) history.push("/build" + frag);
+                                else setErrorText("An error occurred");
+                            }}>Make a new mix</button>
+                        </div>
+                    ) : (null)}
+                    {showConfirmation ? (
+                        <Confirmation message={"Mix successfully added"} showConfirmation={showConfirmation} toggleShowConfirmation={toggleShowConfirmation} />
                     ) : (null)}
                 </div>
             )}

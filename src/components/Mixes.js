@@ -6,7 +6,7 @@ import MixDescription from './MixDescription';
 
 const frag = localStorage.getItem("frag");
 
-const Mixes = ({mixes, selectedMix, setSelectedMix, setMixProps}) => {
+const Mixes = ({mixes, selectedMix, setSelectedMix, setMixProps, toggleShowPanel}) => {
     const history = useHistory();
     let revMixes = [...mixes];
     revMixes.reverse();
@@ -16,7 +16,8 @@ const Mixes = ({mixes, selectedMix, setSelectedMix, setMixProps}) => {
         <div className="casette" title="Add a mix" onClick={() => {
                 setMixProps({});
                 if (frag) {
-                    history.push("/build" + frag);
+                    toggleShowPanel(true);
+                    //history.push("/build" + frag);
                     localStorage.removeItem("currentMix");
                     localStorage.removeItem("selectedTracks");
                 }
@@ -30,7 +31,9 @@ const Mixes = ({mixes, selectedMix, setSelectedMix, setMixProps}) => {
                 localStorage.setItem("selectedTracks", JSON.stringify(mix.tracks));
                 setSelectedMix(mix.id === selectedMix.id ? {} : mix);
             }}>
-                <img src={mix.cover} alt="cover" title={mix.name} className={mix.id === selectedMix.id ? "widetape" : "sidetape"}></img>
+                {mix.cover ? (
+                    <img src={mix.cover} alt="cover" title={mix.name} className={mix.id === selectedMix.id ? "widetape" : "sidetape"}></img>
+                ) : (null)}
                 {mix.id === selectedMix.id ? (
                     <MixDescription mix={mix} />
                 ) : (null)}
