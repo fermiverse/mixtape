@@ -196,9 +196,11 @@ const Menu = ({mixProps, setMixProps}) => {
                             <input type="text" id="embed-bar" required={true} spellCheck={false} autoComplete="off" placeholder="Paste an embed link.." value={embedLink} onChange={(e) => {
                                 setEmbedLink(e.target.value);
                             }} />
-                            <img src={embedIcon} id="embed" alt="embed" width="24px" height="24px" title="Import mix" onClick={() => {
-                                if (embedLink && account && account.spotifyId) processEmbed(embedLink, account.spotifyId);
-                            }}></img>
+                            <button className="blank" onClick={() => {
+                                    if (embedLink && account && account.spotifyId) processEmbed(embedLink, account.spotifyId);
+                                }}>
+                                <img src={embedIcon} id="embed" alt="embed" width="24px" height="24px" title="Import mix"></img>
+                            </button>
                             <p style={{color: "black"}}>OR</p>
                             <button id="buildMix" onClick={() => {
                                 if (frag) history.push("/build" + frag);
