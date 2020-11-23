@@ -5,6 +5,7 @@ import addIcon from '../graphics/addMix.svg';
 import MixDescription from './MixDescription';
 
 const frag = localStorage.getItem("frag");
+const defaultMixCover = "https://images.unsplash.com/photo-1606059979642-8390434af3d5?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyMXx8fGVufDB8fHw%3D&auto=format&fit=crop&w=500&q=60";
 
 const Mixes = ({mixes, selectedMix, setSelectedMix, setMixProps, toggleShowPanel}) => {
     const history = useHistory();
@@ -31,9 +32,7 @@ const Mixes = ({mixes, selectedMix, setSelectedMix, setMixProps, toggleShowPanel
                 localStorage.setItem("selectedTracks", JSON.stringify(mix.tracks));
                 setSelectedMix(mix.id === selectedMix.id ? {} : mix);
             }}>
-                {mix.cover ? (
-                    <img src={mix.cover} alt="cover" title={mix.name} className={mix.id === selectedMix.id ? "widetape" : "sidetape"}></img>
-                ) : (null)}
+                <img src={mix.cover ? mix.cover : defaultMixCover} alt="cover" title={mix.name} className={mix.id === selectedMix.id ? "widetape" : "sidetape"}></img>
                 {mix.id === selectedMix.id ? (
                     <MixDescription mix={mix} />
                 ) : (null)}
