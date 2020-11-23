@@ -16,6 +16,7 @@ const MixForm = ({mixProps, setMixProps}) => {
         if (localStorage.getItem("user") === null || 
         localStorage.getItem("account") === null || 
         window.location.href.search("#access_token=") === -1) history.push("/");
+        
     // eslint-disable-next-line
     }, []);
     

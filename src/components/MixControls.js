@@ -25,9 +25,15 @@ const deleteMix = (mix, account) => {
     return retVal;
 };
 
+const generateEmbed = (mix, spotifyId) => {
+    if (spotifyId) {
+        return `https://api.fermiverse.com/sharing/?from=${spotifyId}&mix=${mix.id}`
+    } else return null;
+};
+
 const frag = localStorage.getItem("frag");
 
-const MixControls = ({selectedMix, setMixProps, allMixes, setAllMixes, setErrorText}) => {
+const MixControls = ({selectedMix, setMixProps, allMixes, setAllMixes, setErrorText, setShareLink, spotifyId}) => {
     const account = localStorage.getItem("account") ? JSON.parse(localStorage.getItem("account")) : {};
     const history = useHistory();
     
@@ -50,7 +56,7 @@ const MixControls = ({selectedMix, setMixProps, allMixes, setAllMixes, setErrorT
             </button>
             <button className="blank" title="Share mix" onClick={(e) => {
                 if (selectedMix.name) {
-                    console.log("doooodooo")
+                    setShareLink(generateEmbed(selectedMix, spotifyId));
                 } else {
                     setErrorText("First, tap on a mix to select it");
                 }

@@ -20,7 +20,7 @@ const convertTime = (msTime) => {
 };
 
 const getArtists = (track, outputString = false) => {
-    console.log(track)
+
     if (track.artists) {
         if (track.artists && track.artists[0].name) {
             if (outputString) return track.artists.map(artist => artist.name).join(", ");
