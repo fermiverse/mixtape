@@ -54,7 +54,9 @@ const Player = ({mixProps, setMixProps}) => {
     const [selectedTrack, setSelectedTrack] = useState({track: tracks[0], isPlaying: false});
     const [showDescription, toggleShowDescription] = useState(false);
     const [showConfirmation, toggleShowConfirmation] = useState(false);
+    const [player, setPlayer] = useState(localStorage.getItem("spotifyPlayer") ? JSON.parse(localStorage.getItem("spotifyPlayer")).player : null)
     const history = useHistory();
+   
 
     useEffect(() => {
         if (window.location.href.search("#access_token=") === -1) history.push("/");
@@ -68,7 +70,7 @@ const Player = ({mixProps, setMixProps}) => {
             ) : null}
             {(user) ? (
                 <Playbar selectedTrack={selectedTrack} setSelectedTrack={setSelectedTrack} 
-                tracks={tracks} setTracks={setTracks} />
+                tracks={tracks} setTracks={setTracks} player={player} />
             ) : (null)}
             {(user) ? (
                 <Playlist user={user} token={accessToken} 
