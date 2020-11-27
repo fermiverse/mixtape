@@ -1,9 +1,8 @@
 import React from 'react';
 import axios from 'axios';
-import Lottie from 'react-lottie';
 import heartIcon from '../graphics/love.svg';
 import filledHeartIcon from '../graphics/newlove.svg';
-import playingLottie from '../graphics/playing.json';
+import playingGif from '../graphics/playing.gif';
 
 const convertTime = (msTime) => {
     let secs = Math.floor(msTime/1000);
@@ -34,14 +33,7 @@ const Track = ({track, tracks, setTracks, selectedTrack, setSelectedTrack, progr
     let trackUris = tracks.map(track => track.uri);
     let device_id = localStorage.getItem("device_id");
     let access_token = localStorage.getItem("token");
-    const options = {
-        loop: true,
-        autoplay: true,
-        animationData: playingLottie,
-        rendererSettings: {
-          preserveAspectRatio: "xMidYMid slice"
-        }
-    };
+    
     return ( 
         <div className="track" onDoubleClick={() => {
             clearTimeout(timer);
@@ -53,7 +45,7 @@ const Track = ({track, tracks, setTracks, selectedTrack, setSelectedTrack, progr
         }} onClick={() => {
             timer = setTimeout(() => {
                 if (!prevent) {
-                    if (selectedTrack && device_id && access_token) {
+                    if (selectedTrack && device_id && access_token && selectedTrack.track.uri !== track.uri) {
                         if (selectedTrack.isPlaying) {
                             let pos = progress[selectedTrack.track.uri];
                             axios.put(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
@@ -78,7 +70,7 @@ const Track = ({track, tracks, setTracks, selectedTrack, setSelectedTrack, progr
                     }                   
                 }
                 prevent = false;
-            }, 200);            
+            }, 100);            
         }}>
             <p className="title">{track.name}</p>
             <p className="artist">{fetchArtists(track)}</p>
@@ -101,9 +93,7 @@ const Track = ({track, tracks, setTracks, selectedTrack, setSelectedTrack, progr
                 }}></img>
             )}
             {(selectedTrack && track.name === selectedTrack.track.name && selectedTrack.isPlaying) ? (
-                <div className="playing">
-                    <Lottie options={options} height="25px" width="25px" />
-                </div>
+                <img src={playingGif} alt="p" height="25px" width="25px" style={{position: "absolute", top: "16px", right: "54px"}}></img>
             ) : (null)}
         </div>
     );

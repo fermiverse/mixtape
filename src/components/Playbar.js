@@ -13,6 +13,26 @@ const fetchArtists = (track) => {
     return null;
 };
 
+const convertTime = (msTime) => {
+    if (msTime) {
+        let secs = Math.floor(msTime/1000);
+        if (secs >= 60) {
+            let mins = Math.floor(secs/60);
+            secs = secs % 60
+            if (secs < 10) secs = "0" + secs.toString();
+            if (mins >= 60) {
+                let hrs = Math.floor(mins/60);
+                mins = mins % 60;
+                if (mins < 10) mins = "0" + mins.toString();
+                return `${hrs}:${mins}:${secs}`
+            }
+            return `${mins}:${secs}`
+        }
+        if (secs < 10) secs = "0" + secs.toString();
+        return `0:${secs}`
+    } else return `0:00`
+};
+
 const Playbar = ({selectedTrack, setSelectedTrack, tracks, setTracks, progress, setProgress}) => {
     let device_id = localStorage.getItem("device_id");
     let access_token = localStorage.getItem("token");
@@ -27,12 +47,12 @@ const Playbar = ({selectedTrack, setSelectedTrack, tracks, setTracks, progress, 
                     }
                 }).then((res) => {
                     let presentState = res.data;
-                    console.log(presentState);
+                    //console.log(presentState);
                     if (presentState.item.uri !== selectedTrack.uri) {
                         let trackObj = tracks.find((track) => {
                             return track.uri === presentState.item.uri
                         });
-                        setSelectedTrack({...selectedTrack, track: trackObj});
+                        setSelectedTrack({isPlaying: presentState.is_playing, track: trackObj});
                     }
                     if (presentState.progress_ms) {
                         let newProg = {...progress};
@@ -43,7 +63,7 @@ const Playbar = ({selectedTrack, setSelectedTrack, tracks, setTracks, progress, 
                 }).catch((err) => {
                     console.log(err);
                 }); 
-            }, 2000);
+            }, 1000);
         }
         return () => {
             clearInterval(timer);
@@ -164,12 +184,34 @@ const Playbar = ({selectedTrack, setSelectedTrack, tracks, setTracks, progress, 
                     }
                 }}></img>
             </div>
-            <div id="progress-container" onClick={(e) => {
-                let pgDiv = document.getElementById("progress-container");
-                console.log(e.pageY, pgDiv.offsetTop);
-                console.log(e.pageX, pgDiv.offsetLeft);
-            }}>
-                <div id="progress-tracker" style={{width: (100 * (progress[selectedTrack.track.uri] ? progress[selectedTrack.track.uri] : 0) / selectedTrack.track.duration_ms) + "%"}}></div>
+            <div id="progress-container">
+                <p>{convertTime(progress[selectedTrack.track.uri])}</p>
+                <div id="progress-bar" onClick={(e) => {
+                    let pgDiv = document.getElementById("progress-bar");
+                    let rect = pgDiv.getBoundingClientRect();
+                    
+                    if (selectedTrack && selectedTrack.isPlaying && device_id && access_token) {
+                        let pos = selectedTrack.track.duration_ms * (e.clientX - rect.left) / pgDiv.clientWidth;
+                        axios.put(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
+                            uris: trackUris,
+                            offset: {
+                                uri: selectedTrack.track.uri
+                            },
+                            position_ms: pos
+                        }, {
+                            headers: {
+                                Authorization: "Bearer " + access_token
+                            }
+                        }).then((res) => {
+                            
+                        }).catch((err) => {
+                            console.log(err);
+                        });
+                    }
+                }}>
+                    <div id="progress-tracker" style={{width: (100 * (progress[selectedTrack.track.uri] ? progress[selectedTrack.track.uri] : 0) / selectedTrack.track.duration_ms) + "%"}}></div>
+                </div>
+                <p>{convertTime(selectedTrack.track.duration_ms)}</p>
             </div>
             <div id="active-track">
                 {`${selectedTrack.track.name} - ${fetchArtists(selectedTrack.track)}`}
