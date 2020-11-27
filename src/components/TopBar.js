@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import exitIcon from '../graphics/logout.svg';
 import descIcon from '../graphics/desc.svg';
 import backIcon from '../graphics/back.svg';
@@ -13,12 +14,26 @@ const returnPath = (path) => {
 };
 
 const TopBar = ({type, history, showDescription, toggleShowDescription, title, notifs, retPath}) => {
-    //let selectedTracks = localStorage.getItem("selectedTracks") ? JSON.parse(localStorage.getItem("selectedTracks")) : [];
+    let device_id = localStorage.getItem("device_id");
+    let access_token = localStorage.getItem("token");
     
     return ( 
         <div id="topbar">
             <img id="back" src={backIcon} alt="back" title="Back" width="20px" height="20px" onClick={() => {
-                history.push(returnPath(retPath));
+                if (type === "player") {
+                    if (device_id && access_token) {
+                        axios.put(`https://api.spotify.com/v1/me/player/pause?device_id=${device_id}`, {}, {
+                            headers: {
+                                Authorization: "Bearer " + access_token
+                            }
+                        }).then((res) => {
+                            history.push(returnPath(retPath));
+                        }).catch((err) => {
+                            console.log(err);
+                        });
+                    }
+                }
+                else history.push(returnPath(retPath));
             }}></img>
             <p id="title">{title}</p>
             {type === "nav" ? (

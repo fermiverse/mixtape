@@ -46,6 +46,9 @@ const exportToSpotify = async (id, token, name, description, tracks, toggleShowC
 
 const Player = ({mixProps, setMixProps}) => {
 
+    let device_id = localStorage.getItem("device_id");
+    let access_token = localStorage.getItem("token");
+
     const pName = mixProps ? mixProps.name : null;
     const pDes = mixProps ? mixProps.description : null;
     const [tracks, setTracks] = useState(mixProps.tracks);
@@ -54,30 +57,53 @@ const Player = ({mixProps, setMixProps}) => {
     const [selectedTrack, setSelectedTrack] = useState({track: tracks[0], isPlaying: false});
     const [showDescription, toggleShowDescription] = useState(false);
     const [showConfirmation, toggleShowConfirmation] = useState(false);
+    const [progress, setProgress] = useState({});
     const history = useHistory();
+   
 
     useEffect(() => {
         if (window.location.href.search("#access_token=") === -1) history.push("/");
+        return () => {
+            if (selectedTrack.isPlaying && device_id && access_token) {
+                axios.put(`https://api.spotify.com/v1/me/player/pause?device_id=${device_id}`, {}, {
+                    headers: {
+                        Authorization: "Bearer " + access_token
+                    }
+                }).then((res) => {
+                    axios.get(`https://api.spotify.com/v1/me/player`, {
+                        headers: {
+                            Authorization: "Bearer " + access_token
+                        }
+                    }).then((res) => {
+                        
+                    })
+                    setSelectedTrack({...selectedTrack, isPlaying: false});
+                }).catch((err) => {
+                    console.log(err);
+                });
+            }
+        }
     // eslint-disable-next-line
     }, []);
 
     return ( 
         <div className="pane" id="player">
             {(user) ? (
-                <TopBar user={user} history={history} title={pName} showDescription={showDescription} toggleShowDescription={toggleShowDescription} retPath="/menu" />
+                <TopBar user={user} history={history} title={pName} showDescription={showDescription} toggleShowDescription={toggleShowDescription} retPath="/menu" type="player" />
             ) : null}
             {(user) ? (
                 <Playbar selectedTrack={selectedTrack} setSelectedTrack={setSelectedTrack} 
-                tracks={tracks} setTracks={setTracks} />
+                tracks={tracks} setTracks={setTracks} progress={progress} setProgress={setProgress} />
             ) : (null)}
             {(user) ? (
                 <Playlist user={user} token={accessToken} 
                 selectedTrack={selectedTrack} setSelectedTrack={setSelectedTrack} 
-                tracks={tracks} setTracks={setTracks} />
+                tracks={tracks} setTracks={setTracks} progress={progress} setProgress={setProgress} />
             ) : null}
             <div id="bottom-tray">
                 <img src={spotifyIcon} alt="spotify" id="spotify" title="Export to Spotify" width="35px" height="35px" onClick={() => {
-                    exportToSpotify(user.id, accessToken, pName, pDes, tracks, toggleShowConfirmation);
+                    let conf = window.confirm(`Export ${pName ? pName : "mix"} to Spotify playlist?`);
+                    if (conf) exportToSpotify(user.id, accessToken, pName, pDes, tracks, toggleShowConfirmation);
                 }}></img>
             </div>
             {showDescription ? (

@@ -70,8 +70,7 @@ const Menu = ({mixProps, setMixProps}) => {
     const [showConfirmation, toggleShowConfirmation] = useState(false);
 
     const processEmbed = async (url, spotifyId) => {
-        let urlObj = new URL(url);
-        if ((urlObj.hostname === "api.fermiverse.com" || urlObj.hostname === "localhost") && urlObj.pathname === "/sharing") {
+        if ((url.search("api.fermiverse.com") !== -1 || url.search("localhost") !== -1) && url.search("/sharing") !== -1) {
             let newUrl = url + `&to=${spotifyId}`;
             await axios.get(newUrl).then((res) => {
                 toggleShowPanel(false);
