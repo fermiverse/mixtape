@@ -47,13 +47,13 @@ const Track = ({track, tracks, setTracks, selectedTrack, setSelectedTrack, progr
                 if (!prevent) {
                     if (selectedTrack && device_id && access_token && selectedTrack.track.uri !== track.uri) {
                         if (selectedTrack.isPlaying) {
-                            let pos = progress[selectedTrack.track.uri];
+                            //let pos = progress[selectedTrack.track.uri];
                             axios.put(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
                                 uris: trackUris,
                                 offset: {
                                     uri: track.uri
                                 },
-                                position_ms: pos ? pos : 1
+                                position_ms: 1
                             }, {
                                 headers: {
                                     Authorization: "Bearer " + access_token
