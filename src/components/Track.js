@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import Lottie from 'react-lottie';
 import heartIcon from '../graphics/love.svg';
 import filledHeartIcon from '../graphics/newlove.svg';
@@ -29,7 +30,10 @@ const fetchArtists = (track) => {
 let timer = 0;
 let prevent = false;
 
-const Track = ({track, tracks, setTracks, selectedTrack, setSelectedTrack}) => {
+const Track = ({track, tracks, setTracks, selectedTrack, setSelectedTrack, progress, setProgress}) => {
+    let trackUris = tracks.map(track => track.uri);
+    let device_id = localStorage.getItem("device_id");
+    let access_token = localStorage.getItem("token");
     const options = {
         loop: true,
         autoplay: true,
@@ -49,8 +53,29 @@ const Track = ({track, tracks, setTracks, selectedTrack, setSelectedTrack}) => {
         }} onClick={() => {
             timer = setTimeout(() => {
                 if (!prevent) {
-                    let isOn = selectedTrack.isPlaying;
-                    setSelectedTrack({track: track, isPlaying: isOn});
+                    if (selectedTrack && device_id && access_token) {
+                        if (selectedTrack.isPlaying) {
+                            let pos = progress[selectedTrack.track.uri];
+                            axios.put(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
+                                uris: trackUris,
+                                offset: {
+                                    uri: track.uri
+                                },
+                                position_ms: pos ? pos : 1
+                            }, {
+                                headers: {
+                                    Authorization: "Bearer " + access_token
+                                }
+                            }).then((res) => {
+                                setSelectedTrack({track: track, isPlaying: true});
+                            }).catch((err) => {
+                                console.log(err);
+                            });
+                        } else {
+                            setSelectedTrack({track: track, isPlaying: false});
+                        }
+                        
+                    }                   
                 }
                 prevent = false;
             }, 200);            
@@ -77,7 +102,7 @@ const Track = ({track, tracks, setTracks, selectedTrack, setSelectedTrack}) => {
             )}
             {(selectedTrack && track.name === selectedTrack.track.name && selectedTrack.isPlaying) ? (
                 <div className="playing">
-                    <Lottie options={options} height="30px" width="30px" />
+                    <Lottie options={options} height="25px" width="25px" />
                 </div>
             ) : (null)}
         </div>

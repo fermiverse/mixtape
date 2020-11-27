@@ -54,7 +54,7 @@ const Player = ({mixProps, setMixProps}) => {
     const [selectedTrack, setSelectedTrack] = useState({track: tracks[0], isPlaying: false});
     const [showDescription, toggleShowDescription] = useState(false);
     const [showConfirmation, toggleShowConfirmation] = useState(false);
-    const [player, setPlayer] = useState(localStorage.getItem("spotifyPlayer") ? JSON.parse(localStorage.getItem("spotifyPlayer")).player : null)
+    const [progress, setProgress] = useState({});
     const history = useHistory();
    
 
@@ -70,16 +70,17 @@ const Player = ({mixProps, setMixProps}) => {
             ) : null}
             {(user) ? (
                 <Playbar selectedTrack={selectedTrack} setSelectedTrack={setSelectedTrack} 
-                tracks={tracks} setTracks={setTracks} player={player} />
+                tracks={tracks} setTracks={setTracks} progress={progress} setProgress={setProgress} />
             ) : (null)}
             {(user) ? (
                 <Playlist user={user} token={accessToken} 
                 selectedTrack={selectedTrack} setSelectedTrack={setSelectedTrack} 
-                tracks={tracks} setTracks={setTracks} />
+                tracks={tracks} setTracks={setTracks} progress={progress} setProgress={setProgress} />
             ) : null}
             <div id="bottom-tray">
                 <img src={spotifyIcon} alt="spotify" id="spotify" title="Export to Spotify" width="35px" height="35px" onClick={() => {
-                    exportToSpotify(user.id, accessToken, pName, pDes, tracks, toggleShowConfirmation);
+                    let conf = window.confirm(`Export ${pName ? pName : "mix"} to Spotify playlist?`);
+                    if (conf) exportToSpotify(user.id, accessToken, pName, pDes, tracks, toggleShowConfirmation);
                 }}></img>
             </div>
             {showDescription ? (

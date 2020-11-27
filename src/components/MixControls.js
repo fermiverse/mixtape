@@ -30,12 +30,12 @@ const generateEmbed = (mix, spotifyId) => {
     } else return null;
 };
 
-const frag = localStorage.getItem("frag");
+
 
 const MixControls = ({selectedMix, setMixProps, allMixes, setAllMixes, setErrorText, setShareLink, spotifyId}) => {
     const account = localStorage.getItem("account") ? JSON.parse(localStorage.getItem("account")) : {};
     const history = useHistory();
-    
+    const frag = localStorage.getItem("frag");
     return (  
         <div id="mix-controls">
             <button className="blank" title="Edit mix" onClick={() => {
@@ -75,11 +75,10 @@ const MixControls = ({selectedMix, setMixProps, allMixes, setAllMixes, setErrorT
             </button>
             <button className="blank" title="Delete mix" onClick={() => {
                 if (selectedMix.name) {
-                    if (deleteMix(selectedMix, account)) {
-                        let newMixes = allMixes.filter(mix => mix.id === selectedMix.id);
-                        setAllMixes(newMixes);
-                        setMixProps({});
-                    } else console.log("Failed to remove");
+                    deleteMix(selectedMix, account);
+                    let newMixes = allMixes.filter(mix => mix.id === selectedMix.id);
+                    setAllMixes(newMixes);
+                    setMixProps({});
                 } else {
                     setErrorText("First, tap on a mix to select it");
                 }

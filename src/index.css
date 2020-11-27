@@ -79,7 +79,10 @@ body {
   align-items: center;
   background-color: rgb(0, 0, 0);
   border-radius: 10px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
   box-shadow: 0px 0px 20px rgb(19, 19, 19);
+  overflow-y: auto;
 }
 
 .info {
@@ -186,7 +189,7 @@ body {
 
 #topbar {
   position: relative;
-  width: 100%;
+  width: 99%;
   height: 60px;
   border-radius: 5px;
   display: flex;
@@ -259,10 +262,31 @@ body {
   color: grey;
 }
 
+#progress-container {
+  position: relative;
+  margin: 10px;
+  width: 80%;
+  height: 4px;
+  border-radius: 5px;
+  background-color: rgba(170, 169, 169, 0.5);
+  cursor: pointer;
+}
+
+#progress-tracker {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 3px;
+  width: 50px;
+  border-radius: 5px;
+  background-color: rgb(177, 177, 177);
+  cursor: pointer;
+}
+
 #playlist {
   position: relative;
   width: 92%;
-  height: max(380px, 60%);
+  height: max(340px, 60%);
   border-radius: 12px;
   border: black 5px solid;
   margin-top: 20px;
@@ -319,8 +343,8 @@ body {
 
 .track .playing {
   position: absolute;
-  top: 13px;
-  right: 50px;
+  top: 16px;
+  right: 54px;
 }
 
 #playbar {
@@ -328,7 +352,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 90px;
+  height: 140px;
   width: 90%;
   margin-top: 20px;
 }
