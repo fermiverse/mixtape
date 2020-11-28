@@ -130,6 +130,33 @@ body {
   text-align: center;
   font-family: var(--primary-font);
   font-weight: 300;
+  font-size: 13.5px;
+}
+
+#direct {
+  position: absolute;
+  bottom: 40px;
+  width: 90%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 13.5px;
+}
+
+#direct p {
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+#direct p:hover {
+  color: var(--button-active-bg);
+  transform: scale(1.1);
+}
+
+.mixed-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 @media only screen and (max-width: 600px) {

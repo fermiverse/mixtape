@@ -1,6 +1,10 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import uuidv4 from 'react-uuid';
 import casetteImage from '../graphics/mix.svg';
+import aboutIcon from '../graphics/about.svg';
+import storyIcon from '../graphics/story.svg';
+import gitIcon from '../graphics/github.svg';
 
 const queryString = (options) => {
     let {client_id, response_type, redirect_uri, state} = options
@@ -26,13 +30,47 @@ const authorize = () => {
 
 const Pane = () => {
 
+    const history = useHistory();
+
     return ( 
         <div className="pane">
             <div style={{position: "absolute", top: "30px"}}>
                 <h1 id="main">mixtape</h1>
                 <div id="msg">A fun way of celebrating equations</div>
             </div>
-            <img id="mix" src={casetteImage} alt="start" title="mixtape" width="65%"></img>
+            <div id="direct">
+                <div className="mixed-btn">
+                    <button className="blank" onClick={() => {
+                        history.push("/about");
+                    }}>
+                        <img src={aboutIcon} alt="delete" width="25px" height="25px"></img>
+                    </button>
+                    <p onClick={() => {
+                        history.push("/about");
+                    }}>About</p>
+                </div>
+                <div className="mixed-btn">
+                    <button className="blank" onClick={() => {
+                        history.push("/story");
+                    }}>
+                        <img src={storyIcon} alt="delete" width="28px" height="28px"></img>
+                    </button>
+                    <p onClick={() => {
+                        history.push("/story");
+                    }}>Story</p>
+                </div>
+                <div className="mixed-btn">
+                    <button className="blank" onClick={() => {
+                        window.location.href = "https://github.com/fermiverse/mixtape";
+                    }}>
+                        <img src={gitIcon} alt="delete" width="25px" height="25px"></img>
+                    </button>
+                    <p onClick={() => {
+                        window.location.href = "https://github.com/fermiverse/mixtape";
+                    }}>Github</p>
+                </div>
+            </div>
+            <img id="mix" src={casetteImage} alt="start" title="mixtape" width="60%" height="auto"></img>
             <button id="spot" onClick={(e) => {
                 authorize();
             }}>Connect Spotify</button>
