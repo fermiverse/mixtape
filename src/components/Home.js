@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import uuidv4 from 'react-uuid';
 import casetteImage from '../graphics/mix.svg';
 
@@ -26,13 +27,24 @@ const authorize = () => {
 
 const Pane = () => {
 
+    const history = useHistory();
+
     return ( 
         <div className="pane">
             <div style={{position: "absolute", top: "30px"}}>
                 <h1 id="main">mixtape</h1>
                 <div id="msg">A fun way of celebrating equations</div>
             </div>
-            <img id="mix" src={casetteImage} alt="start" title="mixtape" width="65%"></img>
+            <div id="direct">
+                <p>About</p>
+                <p onClick={() => {
+                    history.push("/story");
+                }}>Story</p>
+                <p onClick={() => {
+                    window.location.href = "https://github.com/fermiverse/mixtape";
+                }}>Github</p>
+            </div>
+            <img id="mix" src={casetteImage} alt="start" title="mixtape" width="60%" height="auto"></img>
             <button id="spot" onClick={(e) => {
                 authorize();
             }}>Connect Spotify</button>

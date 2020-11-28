@@ -130,6 +130,24 @@ body {
   text-align: center;
   font-family: var(--primary-font);
   font-weight: 300;
+  font-size: 13.5px;
+}
+
+#direct {
+  position: absolute;
+  bottom: 40px;
+  width: 90%;
+  display: flex;
+  justify-content: space-around;
+  font-size: 13px;
+}
+
+#direct p {
+  cursor: pointer;
+}
+
+#direct p:hover {
+  color: var(--button-active-bg);
 }
 
 @media only screen and (max-width: 600px) {

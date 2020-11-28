@@ -7,6 +7,7 @@ import Mixtape from './components/Mixtape';
 import Player from './components/Player';
 import Profile from './components/Profile';
 import Search from './components/Search';
+import Story from './components/Story';
 
 function App() {
   let currentMix = localStorage.getItem("currentMix") ? JSON.parse(localStorage.getItem("currentMix")) : {name: "", description: "", cover: "", tracks: []};
@@ -34,6 +35,9 @@ function App() {
           )} />
           <Route exact path="/profile" render={(props) => (
             <Profile {...props} mixProps={mixProps} setMixProps={setMixProps} />
+          )} />
+          <Route exact path="/story" render={(props) => (
+            <Story {...props} />
           )} />
           <Redirect from="*" to="/"></Redirect>
         </Switch>
