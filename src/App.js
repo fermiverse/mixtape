@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Route, BrowserRouter, Switch, Redirect } from 'react-router-dom';
+import About from './components/About';
 import Home from './components/Home';
 import Menu from './components/Menu';
 import MixForm from './components/MixForm';
@@ -38,6 +39,9 @@ function App() {
           )} />
           <Route exact path="/story" render={(props) => (
             <Story {...props} />
+          )} />
+          <Route exact path="/about" render={(props) => (
+            <About {...props} />
           )} />
           <Redirect from="*" to="/"></Redirect>
         </Switch>

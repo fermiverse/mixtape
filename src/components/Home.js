@@ -36,7 +36,9 @@ const Pane = () => {
                 <div id="msg">A fun way of celebrating equations</div>
             </div>
             <div id="direct">
-                <p>About</p>
+                <p onClick={() => {
+                    history.push("/about");
+                }}>About</p>
                 <p onClick={() => {
                     history.push("/story");
                 }}>Story</p>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import closeIcon from '../graphics/cancel.svg';
+import backIcon from '../graphics/back.svg';
 let converter = require('number-to-words');
 
 const durationString = () => {
@@ -23,6 +24,7 @@ const getRandomFact = () => {
         "She has a feminist-uncle standup routine",
         "She can code in Python and Javascript 🔥🔥🔥",
         "She likes to take care of the people around her",
+        "Her smile can light up an entire room ✨✨",
         "Sometimes, she forgets how beautiful she is",
         "She's all about organic and sustainable living",
         "She can randomly break into song and dance in the middle of conversations",
@@ -39,6 +41,11 @@ const Story = () => {
     const [randomFact, setRandomFact] = useState(getRandomFact());
     return ( 
         <div className="pane">
+            <button className="blank" style={{position: "absolute", top: "38px", left: "20px"}} onClick={() => {
+                    history.push("/");
+                }}>
+                <img id="back" src={backIcon} alt="back" title="Back" width="20px" height="20px"></img>
+            </button>
             <p id="title" style={{marginTop: "40px"}}>Story</p>
             <div style={{maxWidth: "80%", fontSize: "13.7px"}}>
                 <p>
@@ -49,7 +56,7 @@ const Story = () => {
                     </span> who changed my life, and my perspective for the better.
                 </p>
                 <p>This one time, she was travelling to her hometown, and I wanted to make her a playlist to keep her company.</p>
-                <p>But a regular Spotify/Youtube playlist couldn't express the magnitude of what I felt. (I was also actively trying to impress her at the time*)</p>
+                <p>But a regular Spotify/Youtube playlist couldn't express the magnitude of what I felt. (I was also actively trying to impress her at the time *)</p>
                 <p>In my defense, I hadn't listened to <i>I Wanna Be Yours</i> then.</p>
                 <p>As Alex Turner so eloquently put it,</p>
                 <p style={{textAlign: "center", color: "rgb(172, 134, 12)"}}>
@@ -59,7 +66,7 @@ const Story = () => {
                 </p>
                 <p>That's where the idea of Mixtape, an app built around the experience of making playlists, was born.</p>
                 <p>Hopefully, it can make the same kind of magic for you as it did for us.</p>
-                <p>*I still am</p>
+                <p>* I still am</p>
             </div>
             <button id="build" onClick={() => {
                 history.push("/");
