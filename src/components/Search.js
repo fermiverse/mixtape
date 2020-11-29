@@ -75,20 +75,24 @@ const Search = ({mixProps, setMixProps}) => {
             {/*<SearchFilters searchCategories={searchCategories} setSearchCategories={setSearchCategories} />*/}
             <SearchResults searchResults={searchResults} mixProps={mixProps} setMixProps={setMixProps} notifCount={notifCount} setNotifCount={setNotifCount} />
             <button id="build" onClick={() => {
-                let currentMix = localStorage.getItem("currentMix") ? JSON.parse(localStorage.getItem("currentMix")) : {};
+                //let currentMix = localStorage.getItem("currentMix") ? JSON.parse(localStorage.getItem("currentMix")) : {};
                 let selectedTracks = localStorage.getItem("selectedTracks") ? JSON.parse(localStorage.getItem("selectedTracks")) : [];
                 let account = localStorage.getItem("account") ? JSON.parse(localStorage.getItem("account")) : {};
                 let frag = localStorage.getItem("frag") ? localStorage.getItem("frag") : "";
-                if (account && currentMix && selectedTracks) {
-                    setMixProps({...currentMix, tracks: selectedTracks, id: "mix_" + uuid(), from: account});
-                    if (currentMix.id) localStorage.setItem("currentMix", JSON.stringify({...currentMix, tracks: selectedTracks, from: {spotifyId: account.user.spotifyId}}));
-                    else localStorage.setItem("currentMix", JSON.stringify({...currentMix, tracks: selectedTracks, id: "mix_" + uuid(), from: {spotifyId: account.user.spotifyId}}));
+                if (account && selectedTracks) {
+                    if (mixProps.id) {
+                        localStorage.setItem("currentMix", JSON.stringify({...mixProps, tracks: selectedTracks, from: {spotifyId: account.user.spotifyId}}));
+                        setMixProps({...mixProps, tracks: selectedTracks, from: {spotifyId: account.user.spotifyId}});
+                    } else {
+                        localStorage.setItem("currentMix", JSON.stringify({...mixProps, tracks: selectedTracks, id: "mix_" + uuid(), from: {spotifyId: account.user.spotifyId}}));
+                        setMixProps({...mixProps, tracks: selectedTracks, id: "mix_" + uuid(), from: {spotifyId: account.user.spotifyId}});
+                    }
                     history.push("/ship" + frag);
                 } else {
                     if (frag) history.push("/menu" + frag);
                     else history.push("/");
                 }
-            }}>Build</button>
+            }}>{mixProps.id ? "Next" : "Build"}</button>
         </div>
     );
 }

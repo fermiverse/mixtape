@@ -4,9 +4,10 @@ import TopBar from './TopBar';
 //import uuid from 'react-uuid';
 
 
-const frag = localStorage.getItem("frag");
+
 
 const MixForm = ({mixProps, setMixProps}) => {
+    const frag = localStorage.getItem("frag");
     const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
     //const account = localStorage.getItem("account") ? JSON.parse(localStorage.getItem("account")) : null;
     const history = useHistory();
@@ -29,6 +30,7 @@ const MixForm = ({mixProps, setMixProps}) => {
                 e.preventDefault();
                 if (mixProps.name) {
                     localStorage.setItem("currentMix", JSON.stringify(mixProps));
+                    localStorage.setItem("selectedTracks", JSON.stringify(mixProps.tracks));
                     history.push("/search" + frag);
                 }
             }}>
