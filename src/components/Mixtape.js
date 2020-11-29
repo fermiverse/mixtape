@@ -63,12 +63,9 @@ const Mixtape = ({mixProps, setMixProps}) => {
             )}
             {!showLoader && (
                 <button id="build" title="Ship" onClick={() => {
-                    if (user && user.id && user.display_name) {
-                        currentMix["from"] = {
-                            name: user.display_name,
-                            spotifyId: user.id
-                        };
-                        if (addMix(currentMix, user)) {
+                    let selectedTracks = localStorage.getItem("selectedTracks") ? JSON.parse(localStorage.getItem("selectedTracks")) : [];
+                    if (user && user.id && user.display_name && selectedTracks.length) {
+                        if (addMix({...currentMix, tracks: selectedTracks}, user)) {
                             setMixProps({});
                             toggleShowLoader(true);
                         }

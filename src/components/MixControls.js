@@ -41,10 +41,11 @@ const MixControls = ({selectedMix, setMixProps, allMixes, setAllMixes, setErrorT
             <button className="blank" title="Edit mix" onClick={() => {
                 if (selectedMix.name) {
                     if (frag) {
+                        localStorage.removeItem("currentMix");
+                        localStorage.setItem("selectedTracks", JSON.stringify(selectedMix.tracks));
                         let newMixProps = {...selectedMix};
                         setMixProps(newMixProps);
                         history.push("/build" + frag);
-                        localStorage.removeItem("currentMix");
                     }
                     else history.push("/");
                 } else {
