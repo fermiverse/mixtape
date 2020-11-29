@@ -33,12 +33,15 @@ const TopBar = ({type, history, showDescription, toggleShowDescription, title, n
                         });
                     }
                 }
-                else history.push(returnPath(retPath));
+                else {
+                    if (title) history.push(returnPath(retPath));
+                    else history.push(returnPath("/menu"));
+                }
             }}></img>
             <p id="title">{title}</p>
             {type === "nav" ? (
                 <img id="lmix" src={mixIcon} alt="mix" title="Mixtape" width="28px" onClick={() => {
-                    history.push(returnPath("/ship"));
+                    if (title) history.push(returnPath("/ship"));
                 }}></img>
             ) : (
                 <img id="desc" src={descIcon} alt="description" title="Description" width="20px" height="20px" onClick={() => {
