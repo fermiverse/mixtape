@@ -29,6 +29,7 @@ const MixForm = ({mixProps, setMixProps}) => {
                 e.preventDefault();
                 if (mixProps.name) {
                     localStorage.setItem("currentMix", JSON.stringify(mixProps));
+                    localStorage.setItem("selectedTracks", JSON.stringify(mixProps.tracks));
                     history.push("/search" + frag);
                 }
             }}>
