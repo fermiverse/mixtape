@@ -23,7 +23,7 @@ const Persona = ({user, history}) => {
             </div>
             <div id="user-info">
                 <h6>{user.name ? user.name : "Anon"}</h6>
-                <p>{user.description ? user.description.substring(0, 30) : "Special person"}</p>
+                <p>{user.description ? (user.description.length > 31 ? user.description.substring(0, 30) + ".." : user.description) : "Special person"}</p>
             </div>
             <img id="exit" src={exitIcon} alt="exit" title="Logout" width="20px" height="20px" onClick={() => {
                 window.localStorage.clear();

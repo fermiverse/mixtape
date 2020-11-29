@@ -68,31 +68,33 @@ const Search = ({mixProps, setMixProps}) => {
     return ( 
         <div className="pane">
             {(user) ? (
-                <TopBar user={user} history={history} type="nav" title={null} notifs={notifCount} retPath="/build" />
+                <TopBar user={user} history={history} type="nav" title={mixProps.name ? mixProps.name : null} notifs={notifCount} retPath="/build" />
             ) : null}
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} 
             searchResults={setSearchResults} setSearchResults={setSearchResults} />
             {/*<SearchFilters searchCategories={searchCategories} setSearchCategories={setSearchCategories} />*/}
             <SearchResults searchResults={searchResults} mixProps={mixProps} setMixProps={setMixProps} notifCount={notifCount} setNotifCount={setNotifCount} />
-            <button id="build" onClick={() => {
-                //let currentMix = localStorage.getItem("currentMix") ? JSON.parse(localStorage.getItem("currentMix")) : {};
-                let selectedTracks = localStorage.getItem("selectedTracks") ? JSON.parse(localStorage.getItem("selectedTracks")) : [];
-                let account = localStorage.getItem("account") ? JSON.parse(localStorage.getItem("account")) : {};
-                let frag = localStorage.getItem("frag") ? localStorage.getItem("frag") : "";
-                if (account && selectedTracks) {
-                    if (mixProps.id) {
-                        localStorage.setItem("currentMix", JSON.stringify({...mixProps, tracks: selectedTracks, from: {spotifyId: account.user.spotifyId}}));
-                        setMixProps({...mixProps, tracks: selectedTracks, from: {spotifyId: account.user.spotifyId}});
+            {mixProps.name ? (
+                <button id="build" onClick={() => {
+                    //let currentMix = localStorage.getItem("currentMix") ? JSON.parse(localStorage.getItem("currentMix")) : {};
+                    let selectedTracks = localStorage.getItem("selectedTracks") ? JSON.parse(localStorage.getItem("selectedTracks")) : [];
+                    let account = localStorage.getItem("account") ? JSON.parse(localStorage.getItem("account")) : {};
+                    let frag = localStorage.getItem("frag") ? localStorage.getItem("frag") : "";
+                    if (account && selectedTracks) {
+                        if (mixProps.id) {
+                            localStorage.setItem("currentMix", JSON.stringify({...mixProps, tracks: selectedTracks, from: {spotifyId: account.user.spotifyId}}));
+                            setMixProps({...mixProps, tracks: selectedTracks, from: {spotifyId: account.user.spotifyId}});
+                        } else {
+                            localStorage.setItem("currentMix", JSON.stringify({...mixProps, tracks: selectedTracks, id: "mix_" + uuid(), from: {spotifyId: account.user.spotifyId}}));
+                            setMixProps({...mixProps, tracks: selectedTracks, id: "mix_" + uuid(), from: {spotifyId: account.user.spotifyId}});
+                        }
+                        history.push("/ship" + frag);
                     } else {
-                        localStorage.setItem("currentMix", JSON.stringify({...mixProps, tracks: selectedTracks, id: "mix_" + uuid(), from: {spotifyId: account.user.spotifyId}}));
-                        setMixProps({...mixProps, tracks: selectedTracks, id: "mix_" + uuid(), from: {spotifyId: account.user.spotifyId}});
+                        if (frag) history.push("/menu" + frag);
+                        else history.push("/");
                     }
-                    history.push("/ship" + frag);
-                } else {
-                    if (frag) history.push("/menu" + frag);
-                    else history.push("/");
-                }
-            }}>{mixProps.id ? "Next" : "Build"}</button>
+                }}>{mixProps.id ? "Next" : "Build"}</button>
+            ) : (null)}
         </div>
     );
 }

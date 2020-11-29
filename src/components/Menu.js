@@ -68,6 +68,7 @@ const Menu = ({mixProps, setMixProps}) => {
     const [embedLink, setEmbedLink] = useState("");
     const [showPanel, toggleShowPanel] = useState(false);
     const [showConfirmation, toggleShowConfirmation] = useState(false);
+    const [showDeleteConfirmation, toggleDeleteConfirmation] = useState(false);
 
     const processEmbed = async (url, spotifyId) => {
         if ((url.search("api.fermiverse.com") !== -1 || url.search("localhost") !== -1) && url.search("/sharing") !== -1) {
@@ -128,18 +129,26 @@ const Menu = ({mixProps, setMixProps}) => {
     }, [history]);
 
     useEffect(() => {
+        let timer;
         if (errorText) {
-            setTimeout(() => {
+            timer = setTimeout(() => {
                 setErrorText("");
             }, 4000);
+        }
+        return () => {
+            clearTimeout(timer);
         }
     });
 
     useEffect(() => {
+        let timer;
         if (showLoader) {
-            setTimeout(() => {
+            timer = setTimeout(() => {
                 toggleShowLoader(false);
             }, 4000);
+        }
+        return () => {
+            clearTimeout(timer);
         }
     });
 
@@ -165,7 +174,7 @@ const Menu = ({mixProps, setMixProps}) => {
                     <p>{`My Mixes (${allMixes ? allMixes.length : 0})`}</p>
                     <Mixes mixes={allMixes} selectedMix={selectedMix} setSelectedMix={setSelectedMix} 
                     allMixes={allMixes} setAllMixes={setAllMixes} setMixProps={setMixProps} toggleShowPanel={toggleShowPanel} />
-                    <MixControls selectedMix={selectedMix} setMixProps={setMixProps} allMixes={allMixes} 
+                    <MixControls toggleDeleteConfirmation={toggleDeleteConfirmation} selectedMix={selectedMix} mixProps={mixProps} setMixProps={setMixProps} allMixes={allMixes} 
                     setAllMixes={setAllMixes} setErrorText={setErrorText} setShareLink={setShareLink}
                     setEmbedLink={setEmbedLink} spotifyId={account ? account.spotifyId : null} />
                     {errorText ? (
@@ -209,6 +218,9 @@ const Menu = ({mixProps, setMixProps}) => {
                     ) : (null)}
                     {showConfirmation ? (
                         <Confirmation message={"Mix successfully added"} showConfirmation={showConfirmation} toggleShowConfirmation={toggleShowConfirmation} />
+                    ) : (null)}
+                    {showDeleteConfirmation ? (
+                        <Confirmation message={"Mix successfully deleted"} showConfirmation={showDeleteConfirmation} toggleShowConfirmation={toggleDeleteConfirmation} />
                     ) : (null)}
                 </div>
             )}

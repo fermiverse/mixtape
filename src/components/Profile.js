@@ -100,7 +100,7 @@ const Profile = () => {
                         e.preventDefault();
                         if (frag) history.push("/menu" + frag);
                         else history.push("/");
-                    }} title="Cancel">Cancel</button>
+                    }} title="Cancel">Back</button>
                     <button type="submit" className="direction" id="fdir" onClick={(e) => {
                         e.preventDefault();
                         if (updateUser(formData, account.user.spotifyId)) toggleShowLoader(true);
@@ -164,7 +164,7 @@ const Profile = () => {
                             <label htmlFor="mixGenres">Genres</label>
                             <div className="mixGenres">
                                 {formData.genres.map(genre => (
-                                    <button className="badge" key={uuid()} 
+                                    <button className="badge" key={uuid()} title={genre}
                                     style={{backgroundColor: getColours(formData.genres.indexOf(genre))}}
                                     onClick={(e) => {
                                         e.preventDefault();
@@ -185,7 +185,7 @@ const Profile = () => {
                     }} />
                     <div className="mixGenres" style={{height: "170px"}}>
                         {formData.genres.map(genre => (
-                            <button className="badge" key={uuid()} 
+                            <button className="badge" key={uuid()} title="Tap to remove"
                             style={{backgroundColor: getColours(formData.genres.indexOf(genre))}}
                             onClick={(e) => {
                                 e.preventDefault();
