@@ -4,7 +4,7 @@ import uuid from 'react-uuid';
 import addIcon from '../graphics/addMix.svg';
 import MixDescription from './MixDescription';
 
-const defaultMixCover = "https://images.unsplash.com/photo-1606059979642-8390434af3d5?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyMXx8fGVufDB8fHw%3D&auto=format&fit=crop&w=500&q=60";
+const defaultMixCover = "https://images.unsplash.com/photo-1498612753354-772a30629934?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTh8fHBhdHRlcm58ZW58MHx8MHw%3D&auto=format&fit=crop&w=500&q=60";
 
 const Mixes = ({mixes, selectedMix, setSelectedMix, setMixProps, toggleShowPanel}) => {
     const frag = localStorage.getItem("frag");

@@ -7,6 +7,8 @@ import Playlist from './Playlist';
 import Playbar from './Playbar';
 import spotifyIcon from '../graphics/spotify.svg';
 import TopBar from './TopBar';
+import Tape from './Tape';
+import collapseIcon from '../graphics/collapse.svg';
 
 const exportToSpotify = async (id, token, name, description, tracks, toggleShowConfirmation) => {
     await axios.post(`https://api.spotify.com/v1/users/${id}/playlists`, {
@@ -52,6 +54,7 @@ const Player = ({mixProps, setMixProps}) => {
     const [showConfirmation, toggleShowConfirmation] = useState(false);
     const [showMessage, toggleShowMessage] = useState(user.product !== "premium" ? true : false);
     const [progress, setProgress] = useState({});
+    const [compactView, toggleCompactView] = useState(false);
     const history = useHistory();
    
 
@@ -66,11 +69,25 @@ const Player = ({mixProps, setMixProps}) => {
                 <TopBar user={user} history={history} title={pName} showDescription={showDescription} toggleShowDescription={toggleShowDescription} 
                 retPath="/menu" type={user.product === "premium" ? "player" : "free-player"} />
             ) : null}
+            {(user && compactView) ? (
+                <div style={{marginTop: "60px"}}>
+                    <Tape cover={mixProps.cover} name={mixProps.name} />
+                </div>
+            ) : (null)}
             {(user) ? (
                 <Playbar selectedTrack={selectedTrack} setSelectedTrack={setSelectedTrack} 
                 tracks={tracks} setTracks={setTracks} progress={progress} setProgress={setProgress} />
             ) : (null)}
             {(user) ? (
+                <div style={{width: "100%", height: "50px", display: "flex", justifyContent: "center", alignItems: "center"}}>
+                    <button id={compactView ? "collapse-playlist" : "expand-playlist"} onClick={() => {
+                        toggleCompactView(!compactView);
+                    }}>
+                        <img src={collapseIcon} alt="collapse" width="17px" height="auto"></img>
+                    </button>
+                </div>
+            ) : null}
+            {(user && !compactView) ? (
                 <Playlist user={user} token={accessToken} 
                 selectedTrack={selectedTrack} setSelectedTrack={setSelectedTrack} 
                 tracks={tracks} setTracks={setTracks} progress={progress} setProgress={setProgress} />

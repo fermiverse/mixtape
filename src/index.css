@@ -323,13 +323,31 @@ body {
   cursor: pointer;
 }
 
+#collapse-playlist {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: transparent;
+  padding: 10px;
+  border-radius: 7px;
+}
+
+#expand-playlist {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: transparent;
+  padding: 10px;
+  border-radius: 7px;
+  transform: rotate(180deg);
+}
+
 #playlist {
   position: relative;
   width: 92%;
-  height: max(340px, 60%);
+  height: max(260px, 45%);
   border-radius: 12px;
   border: black 5px solid;
-  margin-top: 20px;
   padding: 2px;
   background-color: rgb(36, 202, 36);
   overflow-y: auto;
@@ -389,6 +407,7 @@ body {
   height: 140px;
   width: 90%;
   margin-top: 20px;
+  margin-bottom: 10px;
 }
 
 #playbar-empty {
@@ -430,6 +449,8 @@ body {
 }
 
 #bottom-tray {
+  position: absolute;
+  bottom: 0px;
   margin: 20px;
 }
 
