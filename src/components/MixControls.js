@@ -84,7 +84,7 @@ const MixControls = ({selectedMix, mixProps, setMixProps, allMixes, setAllMixes,
                     if (await deleteMix(selectedMix, account, allMixes, setAllMixes, selectedMix)) {
                         setTimeout(() => {
                             toggleDeleteConfirmation(true);
-                        }, 2000);
+                        }, 1000);
                     }
                 } else {
                     setErrorText("First, tap on a mix to select it");

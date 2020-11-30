@@ -124,7 +124,13 @@ const Menu = ({mixProps, setMixProps}) => {
                             }
                             localStorage.setItem("account", JSON.stringify(res.data));
                             let sharedMix = localStorage.getItem("sharedMix") ? JSON.parse(localStorage.getItem("sharedMix")) : {};
-                            if (sharedMix.from && sharedMix.mix) processEmbed(`https://mixtape.fermiverse.com/sharing/?from=${sharedMix.from}&mix=${sharedMix.mix}`, spotifyId);
+                            if (sharedMix.from && sharedMix.mix) {
+                                if (processEmbed(`https://mixtape.fermiverse.com/sharing/?from=${sharedMix.from}&mix=${sharedMix.mix}`, spotifyId)) {
+                                    setTimeout(() => {
+                                        toggleShowConfirmation(true)
+                                    }, 1000);
+                                }
+                            }
                             localStorage.removeItem("sharedMix");
                         } else registerUser(username, spotifyId);
                     }).catch(err => {
