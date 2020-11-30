@@ -83,7 +83,8 @@ const Menu = ({mixProps, setMixProps}) => {
         if ((url.search("mixtape.fermiverse.com") !== -1 || url.search("localhost") !== -1) && url.search("/sharing") !== -1) {
             let newUrl = new URL(url);
             let from = newUrl.searchParams.get("from");
-            let mix = "mix_" + newUrl.searchParams.get("mix");
+            let mix = newUrl.searchParams.get("mix");
+            if (mix.search("mix_") === -1) mix = "mix_" + mix;
             newUrl = `https://api.fermiverse.com/sharing/?from=${from}&mix=${mix}&to=${spotifyId}`;
             await axios.get(newUrl).then((res) => {
                 toggleShowPanel(false);
