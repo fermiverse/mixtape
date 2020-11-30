@@ -49,6 +49,8 @@ const Playboard = ({spotifyId, token, allPlaylists, setAllPlaylists, setMixProps
                         <button className="blank" onClick={async () => {
                             let rtracks = await fetchPlaylistItems(playlist.tracks.href, token);
                             if (rtracks.length && frag) {
+                                localStorage.setItem("currentMix", JSON.stringify({...playlist, tracks: rtracks}));
+                                localStorage.setItem("selectedTracks", JSON.stringify(rtracks));
                                 setMixProps({...playlist, tracks: rtracks});
                                 history.push("/play" + frag);
                             } else {
