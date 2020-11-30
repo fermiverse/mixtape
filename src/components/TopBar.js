@@ -19,10 +19,10 @@ const TopBar = ({type, history, showDescription, toggleShowDescription, title, n
     
     return ( 
         <div id="topbar">
-            <img id="back" src={backIcon} alt="back" title="Back" width="20px" height="20px" onClick={() => {
+            <img id="back" src={backIcon} alt="back" title="Back" width="20px" height="20px" onClick={async () => {
                 if (type === "player") {
                     if (device_id && access_token) {
-                        axios.put(`https://api.spotify.com/v1/me/player/pause?device_id=${device_id}`, {}, {
+                        await axios.put(`https://api.spotify.com/v1/me/player/pause?device_id=${device_id}`, {}, {
                             headers: {
                                 Authorization: "Bearer " + access_token
                             }

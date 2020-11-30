@@ -178,7 +178,7 @@ const Menu = ({mixProps, setMixProps}) => {
         if (showLoader) {
             timer = setTimeout(() => {
                 toggleShowLoader(false);
-            }, 4000);
+            }, 3000);
         }
         return () => {
             clearTimeout(timer);
