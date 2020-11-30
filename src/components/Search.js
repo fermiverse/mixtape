@@ -17,14 +17,14 @@ const filterString = (filters) => {
     return filters.join(",");
 };
 
-const getTrackCount = () => {
-    let selectedTracks = localStorage.getItem("selectedTracks") ? JSON.parse(localStorage.getItem("selectedTracks")) : [];
-    return selectedTracks.length;
-};
-
 //let currentMix = localStorage.getItem("currentMix") ? JSON.parse(localStorage.getItem("currentMix")) : {};
 
 const Search = ({mixProps, setMixProps}) => {
+
+    const getTrackCount = () => {
+        let selectedTracks = localStorage.getItem("selectedTracks") ? JSON.parse(localStorage.getItem("selectedTracks")) : [];
+        return selectedTracks.length;
+    };
    
     const history = useHistory();
     const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
@@ -82,8 +82,8 @@ const Search = ({mixProps, setMixProps}) => {
                     let frag = localStorage.getItem("frag") ? localStorage.getItem("frag") : "";
                     if (account && selectedTracks) {
                         if (mixProps.id) {
-                            localStorage.setItem("currentMix", JSON.stringify({...mixProps, tracks: selectedTracks, from: {spotifyId: account.user.spotifyId}}));
-                            setMixProps({...mixProps, tracks: selectedTracks, from: {spotifyId: account.user.spotifyId}});
+                            localStorage.setItem("currentMix", JSON.stringify({...mixProps, tracks: selectedTracks}));
+                            setMixProps({...mixProps, tracks: selectedTracks});
                         } else {
                             localStorage.setItem("currentMix", JSON.stringify({...mixProps, tracks: selectedTracks, id: "mix_" + uuid(), from: {spotifyId: account.user.spotifyId}}));
                             setMixProps({...mixProps, tracks: selectedTracks, id: "mix_" + uuid(), from: {spotifyId: account.user.spotifyId}});

@@ -11,6 +11,7 @@ import loadLottie from '../graphics/appLoader.json';
 import copyIcon from '../graphics/copyIcon.svg';
 import embedIcon from '../graphics/embed.svg';
 import closeIcon from '../graphics/cancel.svg';
+import Playboard from './Playboard';
 
 const getFragment = (qString, history) => {
     if (qString) {
@@ -40,6 +41,12 @@ const registerUser = (name, spotifyId) => {
     });
 };
 
+const reducePlaylists = (playlists) => {
+    return playlists.map(playlist => {
+        let {name, description, id, uri, tracks} = playlist;
+        return {name, description, id, uri, tracks}
+    })
+};
 
 let isLoggedIn = false;
 let frag;
@@ -59,6 +66,7 @@ const Menu = ({mixProps, setMixProps}) => {
     const history = useHistory();
     const [showDescription, toggleShowDescription] = useState(false);
     const [allMixes, setAllMixes] = useState([]);
+    const [allPlaylists, setAllPlaylists] = useState([]);
     const [selectedMix, setSelectedMix] = useState({});
     const [account, setAccount] = useState(null);
     const [errorText, setErrorText] = useState("");
@@ -70,17 +78,21 @@ const Menu = ({mixProps, setMixProps}) => {
     const [showDeleteConfirmation, toggleDeleteConfirmation] = useState(false);
 
     const processEmbed = async (url, spotifyId) => {
-        if ((url.search("api.fermiverse.com") !== -1 || url.search("localhost") !== -1) && url.search("/sharing") !== -1) {
-            let newUrl = url + `&to=${spotifyId}`;
+        let retVal = false;
+        if ((url.search("mixtape.fermiverse.com") !== -1 || url.search("localhost") !== -1) && url.search("/sharing") !== -1) {
+            let newUrl = new URL(url);
+            let from = newUrl.searchParams.get("from");
+            let mix = "mix_" + newUrl.searchParams.get("mix");
+            newUrl = `https://api.fermiverse.com/sharing/?from=${from}&mix=${mix}&to=${spotifyId}`;
             await axios.get(newUrl).then((res) => {
                 toggleShowPanel(false);
-                toggleShowConfirmation(true);
-                setAccount({...account});
+                retVal = true;
             }).catch((err) => {
                 console.log(err);
                 setErrorText("Unable to add mix");
             });
         } else setErrorText("Invalid embed url");
+        return retVal;
     };
     
     useEffect(() => {
@@ -101,6 +113,17 @@ const Menu = ({mixProps, setMixProps}) => {
                     let username = res.data.display_name;
                     let spotifyId = res.data.id;
                     localStorage.setItem("user", JSON.stringify(res.data));
+                    axios.get(`https://api.spotify.com/v1/users/${spotifyId}/playlists`, {
+                        headers: {
+                            Authorization: "Bearer " + token
+                        }
+                    }).then((res) => {
+                        if (res.data && res.data.items) {
+                            setAllPlaylists(reducePlaylists(res.data.items));
+                        }
+                    }).catch((err) => {
+                        console.log(err);
+                    });
                     axios.get(`http://localhost:8081/users/${res.data.id}`).then((res) => {
                         if (res.data) {
                             console.log(res.data);
@@ -109,6 +132,9 @@ const Menu = ({mixProps, setMixProps}) => {
                                 setAccount(res.data.user);
                             }
                             localStorage.setItem("account", JSON.stringify(res.data));
+                            let sharedMix = localStorage.getItem("sharedMix") ? JSON.parse(localStorage.getItem("sharedMix")) : {};
+                            if (sharedMix.from && sharedMix.mix) processEmbed(`https://api.fermiverse.com/sharing/?from=${sharedMix.from}&mix=${sharedMix.mix}`, spotifyId);
+                            localStorage.removeItem("sharedMix");
                         } else registerUser(username, spotifyId);
                     }).catch(err => {
                         console.log(err);
@@ -174,12 +200,10 @@ const Menu = ({mixProps, setMixProps}) => {
                     <p>{`My Mixes (${allMixes ? allMixes.length : 0})`}</p>
                     <Mixes mixes={allMixes} selectedMix={selectedMix} setSelectedMix={setSelectedMix} 
                     allMixes={allMixes} setAllMixes={setAllMixes} setMixProps={setMixProps} toggleShowPanel={toggleShowPanel} />
-                    <MixControls toggleDeleteConfirmation={toggleDeleteConfirmation} selectedMix={selectedMix} mixProps={mixProps} setMixProps={setMixProps} allMixes={allMixes} 
+                    <MixControls toggleDeleteConfirmation={toggleDeleteConfirmation} selectedMix={selectedMix} mixProps={mixProps} 
+                    setMixProps={setMixProps} allMixes={allMixes} 
                     setAllMixes={setAllMixes} setErrorText={setErrorText} setShareLink={setShareLink}
                     setEmbedLink={setEmbedLink} spotifyId={account ? account.spotifyId : null} />
-                    {errorText ? (
-                        <Error text={errorText} />
-                    ) : (null)}
                     {shareLink ? (
                         <div className="sharing">
                             {shareLink.slice(0, 46) + ".."}
@@ -196,6 +220,11 @@ const Menu = ({mixProps, setMixProps}) => {
                             }}></img>
                         </div>
                     ) : (null)}
+                    {errorText ? (
+                        <Error text={errorText} />
+                    ) : (null)}
+                    <Playboard spotifyId={account ? account.spotifyId : null} token={getFragment(window.location.href, history)} 
+                    allPlaylists={allPlaylists} setAllPlaylists={setAllPlaylists} />
                     {showPanel ? (
                         <div id="panel" style={{height: "250px"}}>
                             <img src={closeIcon} className="close" alt="close" title="Close" width="20px" height="20px" onClick={() => {
@@ -204,8 +233,14 @@ const Menu = ({mixProps, setMixProps}) => {
                             <input type="text" id="embed-bar" required={true} spellCheck={false} autoComplete="off" placeholder="Paste an embed link.." value={embedLink} onChange={(e) => {
                                 setEmbedLink(e.target.value);
                             }} />
-                            <button className="blank" onClick={() => {
-                                    if (embedLink && account && account.spotifyId) processEmbed(embedLink, account.spotifyId);
+                            <button className="blank" onClick={async () => {
+                                    if (embedLink && account && account.spotifyId) {
+                                        if (await processEmbed(embedLink, account.spotifyId)) {
+                                            setTimeout(() => {
+                                                toggleShowConfirmation(true)
+                                            }, 1000);
+                                        }
+                                    }
                                 }}>
                                 <img src={embedIcon} id="embed" alt="embed" width="24px" height="24px" title="Import mix"></img>
                             </button>

@@ -7,7 +7,7 @@ const Confirmation = ({showConfirmation, toggleShowConfirmation, message}) => {
             <img src={closeIcon} className="close" alt="close" title="Close" width="20px" height="20px" onClick={() => {
                 toggleShowConfirmation(false);
             }}></img>
-            <p id={`pdes`} style={{color: "rgb(77, 74, 74)"}}>{message.slice(0, 80)}</p>
+            <p id={`pdes`} style={{color: "rgb(77, 74, 74)"}}>{message.slice(0, 150)}</p>
         </div>
     );
 }

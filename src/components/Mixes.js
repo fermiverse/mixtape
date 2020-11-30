@@ -4,10 +4,10 @@ import uuid from 'react-uuid';
 import addIcon from '../graphics/addMix.svg';
 import MixDescription from './MixDescription';
 
-const frag = localStorage.getItem("frag");
 const defaultMixCover = "https://images.unsplash.com/photo-1606059979642-8390434af3d5?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyMXx8fGVufDB8fHw%3D&auto=format&fit=crop&w=500&q=60";
 
 const Mixes = ({mixes, selectedMix, setSelectedMix, setMixProps, toggleShowPanel}) => {
+    const frag = localStorage.getItem("frag");
     const history = useHistory();
     let revMixes = [...mixes];
     revMixes.reverse();
