@@ -8,6 +8,7 @@ import Mixtape from './components/Mixtape';
 import Player from './components/Player';
 import Profile from './components/Profile';
 import Search from './components/Search';
+import Sharing from './components/Sharing';
 import Story from './components/Story';
 
 function App() {
@@ -42,6 +43,9 @@ function App() {
           )} />
           <Route exact path="/about" render={(props) => (
             <About {...props} />
+          )} />
+          <Route path="/sharing" render={(props) => (
+            <Sharing {...props} />
           )} />
           <Redirect from="*" to="/"></Redirect>
         </Switch>

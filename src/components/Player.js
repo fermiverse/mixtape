@@ -57,9 +57,6 @@ const Player = ({mixProps, setMixProps}) => {
 
     useEffect(() => {
         if (window.location.href.search("#access_token=") === -1) history.push("/");
-        if (user.product === "premium") {
-
-        }
     // eslint-disable-next-line
     }, []);
 

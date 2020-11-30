@@ -28,8 +28,10 @@ const deleteMix = async (mix, account, allMixes, setAllMixes, selectedMix) => {
 };
 
 const generateEmbed = (mix, spotifyId) => {
-    if (spotifyId) {
-        return `https://api.fermiverse.com/sharing/?from=${spotifyId}&mix=${mix.id}`
+    if (spotifyId && mix.id) {
+        let segments = mix.id.split("_");
+        let id = segments[segments.length - 1];
+        return `http://localhost:3000/sharing?from=${spotifyId}&mix=${id}`
     } else return null;
 };
 

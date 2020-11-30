@@ -55,7 +55,7 @@ const MixForm = ({mixProps, setMixProps}) => {
                         thisElem.select();
                     }} onMouseUp={() => {
                         return false
-                    }} onChange={(e) => {
+                    }} onInput={(e) => {
                         setMixProps({...mixProps, cover: e.target.value});
                     }}></input>
                     <div className="img-container">
