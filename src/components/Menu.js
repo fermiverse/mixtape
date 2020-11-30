@@ -231,7 +231,7 @@ const Menu = ({mixProps, setMixProps}) => {
                         <Error text={errorText} />
                     ) : (null)}
                     <Playboard spotifyId={account ? account.spotifyId : null} token={getFragment(window.location.href, history)} 
-                    allPlaylists={allPlaylists} setAllPlaylists={setAllPlaylists} />
+                    allPlaylists={allPlaylists} setAllPlaylists={setAllPlaylists} setMixProps={setMixProps} />
                     {showPanel ? (
                         <div id="panel" style={{height: "250px"}}>
                             <img src={closeIcon} className="close" alt="close" title="Close" width="20px" height="20px" onClick={() => {
