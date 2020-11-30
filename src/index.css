@@ -204,8 +204,7 @@ body {
 }
 
 #persona {
-  position: absolute;
-  top: 0;
+  position: relative;
   width: 99%;
   height: 60px;
   border-radius: 5px;
@@ -216,8 +215,7 @@ body {
 }
 
 #topbar {
-  position: absolute;
-  top: 0;
+  position: relative;
   width: 99%;
   height: 60px;
   border-radius: 5px;
@@ -604,7 +602,6 @@ body {
   box-sizing: border-box;
   width: 100%;
   padding: 20px;
-  margin-top: 50px;
   font-size: 15px;
 }
 
