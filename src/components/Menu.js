@@ -124,7 +124,7 @@ const Menu = ({mixProps, setMixProps}) => {
                             }
                             localStorage.setItem("account", JSON.stringify(res.data));
                             let sharedMix = localStorage.getItem("sharedMix") ? JSON.parse(localStorage.getItem("sharedMix")) : {};
-                            if (sharedMix.from && sharedMix.mix) {
+                            if (sharedMix.from && sharedMix.mix && sharedMix.from !== spotifyId) {
                                 if (processEmbed(`https://mixtape.fermiverse.com/sharing/?from=${sharedMix.from}&mix=${sharedMix.mix}`, spotifyId)) {
                                     setTimeout(() => {
                                         toggleShowConfirmation(true)
@@ -259,7 +259,7 @@ const Menu = ({mixProps, setMixProps}) => {
                         </div>
                     ) : (null)}
                     {showConfirmation ? (
-                        <Confirmation message={"Mix successfully added"} showConfirmation={showConfirmation} toggleShowConfirmation={toggleShowConfirmation} />
+                        <Confirmation message={"Mix successfully added"} showConfirmation={showConfirmation} toggleShowConfirmation={toggleShowConfirmation} type={"add"} />
                     ) : (null)}
                     {showDeleteConfirmation ? (
                         <Confirmation message={"Mix successfully deleted"} showConfirmation={showDeleteConfirmation} toggleShowConfirmation={toggleDeleteConfirmation} />
