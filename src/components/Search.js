@@ -37,25 +37,23 @@ const Search = ({mixProps, setMixProps}) => {
     useEffect(() => {
         let token = localStorage.getItem("token");
         if (searchQuery.length > 1) {
-            setTimeout(() => {
-                axios.get(`https://api.spotify.com/v1/search`, {
-                    headers: {
-                        Authorization: "Bearer " + token
-                    }, 
-                    params: {
-                        q: queryString(searchQuery),
-                        type: filterString(["track"]),
-                        limit: 25
-                    }
-                }).then((res) => {
-                    if (res.data && res.data.tracks) {
-                        setSearchResults(res.data.tracks.items);
-                    }
-                }).catch((err) => {
-                    console.log("Error searching tracks: ", err);
-                    history.push("/");
-                });
-                }, 200);
+            axios.get(`https://api.spotify.com/v1/search`, {
+                headers: {
+                    Authorization: "Bearer " + token
+                }, 
+                params: {
+                    q: queryString(searchQuery),
+                    type: filterString(["track"]),
+                    limit: 25
+                }
+            }).then((res) => {
+                if (res.data && res.data.tracks) {
+                    setSearchResults(res.data.tracks.items);
+                }
+            }).catch((err) => {
+                console.log("Error searching tracks: ", err);
+                history.push("/");
+            });
         }
     // eslint-disable-next-line
     }, [searchQuery]);
