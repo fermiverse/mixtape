@@ -8,15 +8,17 @@ const SearchResults = ({searchResults, setSearchResults, mixProps, setMixProps, 
         searchResults ? (
             type ? (
                 <div id="results" style={{height: "270px"}}>
-                    {searchResults.map(track => (
-                        <Card key={uuid()} track={track} mixProps={mixProps} setMixProps={setMixProps} notifCount={notifCount} setNotifCount={setNotifCount} />
-                    ))}
+                    {searchResults.map(track => {
+                        if (track && track.uri) return <Card key={uuid()} track={track} mixProps={mixProps} setMixProps={setMixProps} notifCount={notifCount} setNotifCount={setNotifCount} />
+                        else return null
+                    })}
                 </div>
             ) : (
                 <div id="results">
-                    {searchResults.map(track => (
-                        <Card key={uuid()} track={track} mixProps={mixProps} setMixProps={setMixProps} notifCount={notifCount} setNotifCount={setNotifCount} />
-                    ))}
+                    {searchResults.map(track => {
+                        if (track && track.uri) return <Card key={uuid()} track={track} mixProps={mixProps} setMixProps={setMixProps} notifCount={notifCount} setNotifCount={setNotifCount} />
+                        else return null
+                    })}
                 </div>
             )
         ) : (null)
