@@ -457,10 +457,17 @@ body {
   overflow: hidden;
 }
 
+#active-track p {
+  margin: 0;
+}
+
 #bottom-tray {
   position: absolute;
   bottom: 0px;
   margin: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #bottom-tray img:hover {
