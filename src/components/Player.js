@@ -67,7 +67,7 @@ const Player = ({mixProps, setMixProps}) => {
         <div className="pane" id="player">
             {(user) ? (
                 <TopBar user={user} history={history} title={pName} showDescription={showDescription} toggleShowDescription={toggleShowDescription} 
-                retPath="/menu" type={user.product === "premium" ? "player" : "free-player"} />
+                retPath="/menu" type={user.product === "premium" ? "player" : "free-player"} isPlaying={selectedTrack.isPlaying} />
             ) : null}
             {(user && compactView) ? (
                 <div style={{marginTop: "60px"}}>

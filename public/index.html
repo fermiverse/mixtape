@@ -34,7 +34,7 @@
       window.onSpotifyWebPlaybackSDKReady = () => {
         const token = localStorage.getItem("token");
         const player = new Spotify.Player({
-          name: 'Mixtape Spotify Playback',
+          name: 'Mixtape Spotify Player',
           getOAuthToken: cb => { cb(token); }
         });
         localStorage.setItem("spotifyPlayer", JSON.stringify({player}));
