@@ -67,7 +67,7 @@ const Player = ({mixProps, setMixProps}) => {
         <div className="pane" id="player">
             {(user) ? (
                 <TopBar user={user} history={history} title={pName} showDescription={showDescription} toggleShowDescription={toggleShowDescription} 
-                retPath="/menu" type={user.product === "premium" ? "player" : "free-player"} />
+                retPath="/menu" type={user.product === "premium" ? "player" : "free-player"} isPlaying={selectedTrack.isPlaying} />
             ) : null}
             {(user && compactView) ? (
                 <div style={{marginTop: "60px"}}>
@@ -106,9 +106,8 @@ const Player = ({mixProps, setMixProps}) => {
             ) : (null)}
             {showMessage ? (
                 <Confirmation showConfirmation={showMessage} toggleShowConfirmation={toggleShowMessage} 
-                message={`Hey ${account.user && account.user.name ? account.user.name : (user ? user.display_name : "user")}
-                , Mixtape cannot stream directly from a free Spotify Account, yet. 
-                Click the spotify logo at the bottom to export this mix to Spotify and play it there.`} />
+                message={`Hey ${account.user && account.user.name ? account.user.name : (user ? user.display_name : "user")}, Mixtape cannot stream directly from a free Spotify Account yet. 
+                Click the spotify logo at the bottom to export this mix to Spotify.`} />
             ) : (null)}
         </div>
     );

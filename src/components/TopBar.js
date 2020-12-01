@@ -13,14 +13,14 @@ const returnPath = (path) => {
     return "/"
 };
 
-const TopBar = ({type, history, showDescription, toggleShowDescription, title, notifs, retPath}) => {
+const TopBar = ({type, history, showDescription, toggleShowDescription, title, notifs, retPath, isPlaying}) => {
     let device_id = localStorage.getItem("device_id");
     let access_token = localStorage.getItem("token");
     
     return ( 
         <div id="topbar">
             <img id="back" src={backIcon} alt="back" title="Back" width="20px" height="20px" onClick={async () => {
-                if (type === "player") {
+                if (type === "player" && isPlaying) {
                     if (device_id && access_token) {
                         await axios.put(`https://api.spotify.com/v1/me/player/pause?device_id=${device_id}`, {}, {
                             headers: {
@@ -51,9 +51,21 @@ const TopBar = ({type, history, showDescription, toggleShowDescription, title, n
             {type === "nav" && notifs ? (
                 <div id="notif">{notifs}</div>
             ) : (null)}
-            <img id="exit" src={exitIcon} alt="exit" title="Logout" width="20px" height="20px" onClick={() => {
+            <img id="exit" src={exitIcon} alt="exit" title="Logout" width="20px" height="20px" onClick={async () => {
                 window.localStorage.clear();
-                history.push("/");
+                if (type === "player" && isPlaying) {
+                    if (device_id && access_token) {
+                        await axios.put(`https://api.spotify.com/v1/me/player/pause?device_id=${device_id}`, {}, {
+                            headers: {
+                                Authorization: "Bearer " + access_token
+                            }
+                        }).then((res) => {
+                            history.push("/");
+                        }).catch((err) => {
+                            console.log(err);
+                        });
+                    }
+                } else history.push("/");
             }}></img>
         </div>
      );
