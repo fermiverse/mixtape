@@ -77,7 +77,7 @@ const Playbar = ({selectedTrack, setSelectedTrack, tracks, setTracks, progress, 
                     if (i > 0) {
                         if (selectedTrack && selectedTrack.isPlaying) {
                             if (device_id && access_token) {
-                                let pos = progress[tracks[i+1].uri];
+                                let pos = progress[tracks[i].uri];
                                 if (pos && pos > 10000) {
                                     axios.put(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
                                         uris: trackUris,
@@ -163,13 +163,12 @@ const Playbar = ({selectedTrack, setSelectedTrack, tracks, setTracks, progress, 
                     if (i < tracks.length - 1) {
                         if (selectedTrack && selectedTrack.isPlaying) {
                             if (device_id && access_token) {
-                                let pos = progress[tracks[i+1].uri];
                                 axios.put(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
                                     uris: trackUris,
                                     offset: {
                                         uri: tracks[i+1].uri
                                     },
-                                    position_ms: pos ? pos : 1
+                                    position_ms: 1
                                 }, {
                                     headers: {
                                         Authorization: "Bearer " + access_token
