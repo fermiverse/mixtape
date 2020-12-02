@@ -213,7 +213,7 @@ const Playbar = ({selectedTrack, setSelectedTrack, tracks, setTracks, progress, 
                 <p>{convertTime(selectedTrack.track.duration_ms)}</p>
             </div>
             <div id="active-track">
-                {`${selectedTrack.track.name} - ${fetchArtists(selectedTrack.track)}`}
+                <p id="track-title">{`${selectedTrack.track.name} - ${fetchArtists(selectedTrack.track)}`}</p>
             </div>
         </div>
     );

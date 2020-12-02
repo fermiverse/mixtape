@@ -80,7 +80,7 @@ const Player = ({mixProps, setMixProps}) => {
             ) : (null)}
             {(user) ? (
                 <div style={{width: "100%", height: "50px", display: "flex", justifyContent: "center", alignItems: "center"}}>
-                    <button id={compactView ? "collapse-playlist" : "expand-playlist"} onClick={() => {
+                    <button id={compactView ? "collapse-playlist" : "expand-playlist"} title={compactView ? "Show tracks" : "Hide tracks"} onClick={() => {
                         toggleCompactView(!compactView);
                     }}>
                         <img src={collapseIcon} alt="collapse" width="17px" height="auto"></img>
