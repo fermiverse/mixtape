@@ -9,6 +9,7 @@ import uuid from 'react-uuid';
 import axios from 'axios';
 import Lottie from 'react-lottie';
 import { SERVER_URL } from '../constants/Base';
+import { genres } from '../data/genres';
 
 const getColours = (index) => {
     let colours = ["rgb(68, 37, 194)", "rgb(64, 18, 252)", "rgb(35, 0, 176)", "rgb(13, 85, 255)", 
@@ -31,15 +32,7 @@ const updateUser = async (formData, spotifyId) => {
     return retVal
 };
 
-const returnPath = (path) => {
-    const frag = localStorage.getItem("frag");
-    if (frag) {
-        return path + frag
-    }
-    return "/"
-};
-
-const allGenres = require("../data/genres.json").genres;
+const allGenres = genres;
 
 const Profile = () => {
     const history = useHistory();
@@ -62,6 +55,13 @@ const Profile = () => {
     const [searchResults, setSearchResults] = useState([]);
     const frag = localStorage.getItem("frag") ? localStorage.getItem("frag") : "";
     //const selectedGenres = allGenres.slice(0, 18);
+    const returnPath = (path) => {
+        const frag = localStorage.getItem("frag");
+        if (frag) {
+            return path + frag
+        }
+        return "/"
+    };
 
     useEffect(() => {
         if (searchValue) {
