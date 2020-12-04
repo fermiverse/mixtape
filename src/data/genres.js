@@ -1,5 +1,4 @@
-{
-  "genres": [
+module.exports.genres = [
     "pop",
     "dance pop",
     "rap",
@@ -5045,5 +5044,4 @@
     "youth orchestra",
     "yunnan traditional",
     "himene tarava"
-  ]
-}
+];
