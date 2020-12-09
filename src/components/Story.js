@@ -13,7 +13,8 @@ const durationString = () => {
     days = days % 30;
     let monthString = months > 0 ? converter.toWords(months) + " " + (months > 1 ? "months" : "month") : "";
     let dayString = days > 0 ? converter.toWords(days) + " " + (days > 1 ? "days" : "day") : "";
-    return monthString + " and " + dayString
+    if (dayString) return monthString + " and " + dayString
+    else return monthString 
 };
 
 const getRandomFact = () => {
