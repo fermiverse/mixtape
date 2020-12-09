@@ -19,6 +19,8 @@ const durationString = () => {
 
 const getRandomFact = () => {
     let facts = [
+        "She's a silver linin', lone ranger ridin' through an open space",
+        "She's an incredible leader - fierce, kind and powerful",
         "She loves the Arctic Monkeys and hates (certain kinds of) eggplant",
         "She's a debating pro, and has been debating since her school days",
         "She founded a Reading Initiative for underprivileged children in her hometown",
