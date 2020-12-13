@@ -1,8 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import Lottie from 'react-lottie';
 import { useHistory } from 'react-router-dom';
 import TopBar from './TopBar';
+import Error from './Error';
+import uploadIcon from '../graphics/cloud.svg';
+import closeIcon from '../graphics/cancel2.svg';
+import addIcon from '../graphics/fileAdd.svg';
+import loadLottie from '../graphics/confirmation.json';
+import axios from 'axios';
 //import uuid from 'react-uuid';
-
 
 
 
@@ -13,6 +19,37 @@ const MixForm = ({mixProps, setMixProps}) => {
     const history = useHistory();
     //const [formData, setFormData] = useState({id: `mix_${uuid()}`, from: account, name: "", description: "", cover: "", tracks: []});
 
+    const [errorText, setErrorText] = useState("");
+    const [uploadMode, toggleUploadMode] = useState(false);
+    const [targetFile, setTargetFile] = useState(null);
+    const [imageUrl, setImageUrl] = useState(null);
+    const [showConfirmation, toggleShowConfirmation] = useState(false);
+    const inputFile = useRef(null);
+
+    const options = {
+        loop: false,
+        autoplay: true,
+        animationData: loadLottie,
+        rendererSettings: {
+          preserveAspectRatio: "xMidYMid slice"
+        }
+    };
+
+    const uploadImage = async (file, spotifyId) => {
+        const formData = new FormData();
+        formData.append("image", file);
+        await axios.post(`http://localhost:8081/users/${spotifyId}/images/upload`, formData).then((res) => {
+            if (res.data.uri) {
+                setMixProps({...mixProps, cover: res.data.uri});
+                setImageUrl(null);
+                toggleShowConfirmation(true);
+            }
+        }).catch((err) => {
+            console.log(err);
+            setErrorText("Error uploading image");
+        });
+    };
+
     useEffect(() => {
         if (localStorage.getItem("user") === null || 
         localStorage.getItem("account") === null || 
@@ -20,6 +57,18 @@ const MixForm = ({mixProps, setMixProps}) => {
         
     // eslint-disable-next-line
     }, []);
+
+    useEffect(() => {
+        let timer;
+        if (errorText) {
+            timer = setTimeout(() => {
+                setErrorText("");
+            }, 4000);
+        }
+        return () => {
+            clearTimeout(timer);
+        }
+    });
     
     return ( 
         <div className="pane">
@@ -58,15 +107,72 @@ const MixForm = ({mixProps, setMixProps}) => {
                     }} onInput={(e) => {
                         setMixProps({...mixProps, cover: e.target.value});
                     }}></input>
-                    <div className="img-container">
-                        {mixProps.cover ? (
-                            <img src={mixProps.cover} alt="cover" id="cover-img" title="Album cover" onError={() => {
-                                document.getElementById("cover-img").style.display = "none";
-                            }}></img>
-                        ) : (null)}
+                    <p style={{textAlign: "center", color: "rgb(150,150,150)", margin: 0, fontSize: "12.5px"}}>OR</p>
+                    <div id="upload">
+                        <input id="file-upload" ref={inputFile} type="file" accept="image/png, image/jpeg" onChange={(e) => {
+                            let file = e.target.files[0];
+                            if (file) {
+                                setImageUrl(URL.createObjectURL(file));
+                                setTargetFile(file);
+                                toggleUploadMode(true);
+                            }
+                        }} onSubmit={(e) => {
+                            e.preventDefault();
+
+                        }} />
+                        {uploadMode ? (
+                            <button className="blank" id="upload-btn" title="Upload image" onClick={(e) => {
+                                e.preventDefault();
+                            }}>
+                                {showConfirmation ? (
+                                    <div className="cfab">
+                                        <div className="loader">
+                                            <Lottie options={options} width="30px" height="auto" />
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="cfab" onClick={(e) => {
+                                        e.preventDefault();
+                                        let spotifyId = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).id : null;
+                                        if (spotifyId && targetFile) {
+                                            uploadImage(targetFile, spotifyId);
+                                        }
+                                    }}>
+                                        <img src={uploadIcon} alt="upload" width="30px" height="30px"></img>
+                                        <i style={{marginTop: "10px"}}>Tap to Upload</i>
+                                    </div>
+                                )}
+                                <div className="dfab" onClick={(e) => {
+                                        e.stopPropagation();
+                                        e.preventDefault();
+                                        toggleUploadMode(false);
+                                        toggleShowConfirmation(false);
+                                        setImageUrl(null);
+                                    }}>
+                                    <img src={closeIcon} className="close" alt="close" title="Close" width="20px" height="20px"></img>
+                                </div>
+                            </button>
+                        ) : (
+                            <button className="blank" id="upload-btn" title="Choose image to upload" onClick={(e) => {
+                                e.preventDefault();
+                                if (mixProps.cover) setMixProps({...mixProps, cover: ""});
+                                inputFile.current.click();
+                            }}>
+                                <div className="cfab">
+                                    <img src={addIcon} alt="add" width="30px" height="30px"></img>
+                                    <i style={{marginTop: "10px"}}>Add your own</i>
+                                </div>
+                            </button>
+                        )}
+                        <img src={mixProps.cover ? mixProps.cover : imageUrl} alt="" id="custom-img" title="Album cover" width="325px" height="auto" style={{borderRadius: "2px", zIndex: 10}} onError={() => {
+                            document.getElementById("custom-img").style.display = "none";
+                        }}></img>
                     </div>
                 </div>
             </form>
+            {errorText ? (
+                <Error text={errorText} />
+            ) : (null)}
         </div>
     );
 }

@@ -10,7 +10,7 @@ import uuid from 'react-uuid';
 
 
 const queryString = (q) => {
-    return q.trim().replace(" ", "%20");
+    return '"' + q.trim().replace(" ", "%20") + '"';
 };
 
 const filterString = (filters) => {
@@ -44,7 +44,8 @@ const Search = ({mixProps, setMixProps}) => {
                 params: {
                     q: queryString(searchQuery),
                     type: filterString(["track"]),
-                    limit: 25
+                    limit: 25,
+                    offset: 0
                 }
             }).then((res) => {
                 if (res.data && res.data.tracks) {

@@ -54,7 +54,7 @@ const Mixtape = ({mixProps, setMixProps}) => {
 
     return ( 
         <div className="pane">
-            <TopBar user={user} history={history} type="nav" retPath="/search" />
+            <TopBar user={user} history={history} type="nav" title={mixProps.name ? mixProps.name : null} retPath="/search" />
             {!showLoader && (
                 <Tape cover={currentMix.cover} name={currentMix.name} />
             )}

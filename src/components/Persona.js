@@ -2,10 +2,10 @@ import React from 'react';
 import defaultAvatar from '../graphics/penguin.png';
 import exitIcon from '../graphics/logout.svg';
 
-const frag = localStorage.getItem("frag");
+
 
 const Persona = ({user, history}) => {
-    
+    const frag = localStorage.getItem("frag");
     return ( 
         <div id="persona">
             <div id="round">
