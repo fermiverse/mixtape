@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Lottie from 'react-lottie';
 import { useHistory } from 'react-router-dom';
+import { SERVER_URL } from '../constants/Base';
 import TopBar from './TopBar';
 import Error from './Error';
 import uploadIcon from '../graphics/cloud.svg';
@@ -38,7 +39,7 @@ const MixForm = ({mixProps, setMixProps}) => {
     const uploadImage = async (file, spotifyId) => {
         const formData = new FormData();
         formData.append("image", file);
-        await axios.post(`http://localhost:8081/users/${spotifyId}/images/upload`, formData).then((res) => {
+        await axios.post(`${SERVER_URL}users/${spotifyId}/images/upload`, formData).then((res) => {
             if (res.data.uri) {
                 setMixProps({...mixProps, cover: res.data.uri});
                 setImageUrl(null);
