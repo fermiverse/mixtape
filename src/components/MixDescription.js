@@ -14,7 +14,7 @@ const getAllArtists = (mix, limit=3) => {
 const MixDescription = ({mix}) => {
     return (  
         <div id="mix-description">
-            <h4 id="pname">{mix.name}</h4>
+            <h4 id="pname" style={{textTransform: "capitalize"}}>{mix.name}</h4>
             <p id="pdes" style={{color: "rgb(190, 190, 190)", fontSize: "13.5px"}}>{mix.description ? mix.description.slice(0, 80) : "Just another mixtape"}</p>
             {(mix.tracks && mix.tracks.length) ? (
                 <p id="partists" style={{color: "rgb(180, 180, 180)", fontSize: "13px"}}><i>{`${getAllArtists(mix)} and more.`}</i></p>
