@@ -142,14 +142,14 @@ const MixForm = ({mixProps, setMixProps}) => {
                                         <i style={{marginTop: "10px"}}>Tap to Upload</i>
                                     </div>
                                 )}
-                                <div className="dfab" onClick={(e) => {
+                                <div className="dfab" style={{position: "absolute", top: "10px", right: "10px"}} onClick={(e) => {
                                         e.stopPropagation();
                                         e.preventDefault();
                                         toggleUploadMode(false);
                                         toggleShowConfirmation(false);
                                         setImageUrl(null);
                                     }}>
-                                    <img src={closeIcon} className="close" alt="close" title="Close" width="20px" height="20px"></img>
+                                    <img src={closeIcon} alt="close" title="Close" width="20px" height="20px"></img>
                                 </div>
                             </button>
                         ) : (
