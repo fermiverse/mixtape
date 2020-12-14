@@ -110,7 +110,7 @@ const Menu = ({mixProps, setMixProps}) => {
                     }
                 })
                 .then(res => {
-                    console.log(res.data);
+                    //console.log(res.data);
                     let username = res.data.display_name;
                     let spotifyId = res.data.id;
                     localStorage.setItem("user", JSON.stringify(res.data));

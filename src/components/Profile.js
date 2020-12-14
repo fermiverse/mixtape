@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import defaultAvatar from '../graphics/penguin.png';
+import React, { useEffect, useState, useRef } from 'react';
 import editIcon from '../graphics/editwhite.svg';
 import plusIcon from '../graphics/otherplus.svg';
 import closeIcon from '../graphics/cancel.svg';
+import uploadIcon from '../graphics/cloud.svg';
+import addIcon from '../graphics/fileAdd.svg';
 import { useHistory } from 'react-router-dom';
 import loadLottie from '../graphics/done.json';
+import confLottie from '../graphics/confirmation.json';
 import uuid from 'react-uuid';
 import axios from 'axios';
 import Lottie from 'react-lottie';
 import { genres } from '../data/genres';
+import Error from './Error';
 
 const getColours = (index) => {
     let colours = ["rgb(68, 37, 194)", "rgb(64, 18, 252)", "rgb(35, 0, 176)", "rgb(13, 85, 255)", 
@@ -46,6 +49,15 @@ const Profile = () => {
         }
     };
 
+    const confOptions = {
+        loop: false,
+        autoplay: true,
+        animationData: confLottie,
+        rendererSettings: {
+          preserveAspectRatio: "xMidYMid slice"
+        }
+    };
+
     const [showLoader, toggleShowLoader] = useState(false);
     const [formData, setFormData] = useState({name: account.user.name, cover: account.user.cover, genres: account.user.genres, description: account.user.description});
     const [showCover, toggleShowCover] = useState(false);
@@ -53,6 +65,12 @@ const Profile = () => {
     const [searchValue, setSearchValue] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const frag = localStorage.getItem("frag") ? localStorage.getItem("frag") : "";
+    const [errorText, setErrorText] = useState("");
+    const [uploadMode, toggleUploadMode] = useState(false);
+    const [targetFile, setTargetFile] = useState(null);
+    const [imageUrl, setImageUrl] = useState(null);
+    const [showConfirmation, toggleShowConfirmation] = useState(false);
+    const inputFile = useRef(null);
     //const selectedGenres = allGenres.slice(0, 18);
     const returnPath = (path) => {
         const frag = localStorage.getItem("frag");
@@ -62,13 +80,28 @@ const Profile = () => {
         return "/"
     };
 
+    const uploadImage = async (file, spotifyId) => {
+        const fData = new FormData();
+        fData.append("image", file);
+        await axios.post(`http://localhost:8081/users/${spotifyId}/images/upload`, fData).then((res) => {
+            if (res.data.uri) {
+                setFormData({...formData, cover: res.data.uri});
+                setImageUrl(null);
+                toggleShowConfirmation(true);
+            }
+        }).catch((err) => {
+            console.log(err);
+            setErrorText("Error uploading image");
+        });
+    };
+
     useEffect(() => {
         if (searchValue) {
             setTimeout(() => {
                 let filteredGenres = allGenres.filter(genre => genre.search(searchValue) !== -1);
                 let filteredGenresTrunc = filteredGenres.slice(0, filteredGenres.length > 15 ? 15 : filteredGenres.length);
                 setSearchResults(filteredGenresTrunc);
-            }, 200);
+            }, 100);
         }
     }, [searchValue]);
 
@@ -115,9 +148,7 @@ const Profile = () => {
                                     toggleShowCover(false);
                                 }, 1500);
                             }}></img>
-                        ) : (
-                            <img src={defaultAvatar} alt="persona"></img>
-                        )}
+                        ) : (null)}
                         </div>
                         <button className="edit-btn" style={{position: "absolute", top: "110px", right: "25px"}} onClick={(e) => {
                             e.preventDefault();
@@ -141,6 +172,73 @@ const Profile = () => {
                             }} onChange={(e) => {
                                 setFormData({...formData, cover: e.target.value});
                             }}></input>
+                        ) : (null)}
+                        {showCover ? (
+                            <p style={{textAlign: "center", color: "rgb(150,150,150)", margin: 0, fontSize: "12.5px"}}>OR</p>
+                        ) : (null)}
+                        {showCover ? (
+                            <div id="upload" style={{marginBottom: "20px"}}>
+                                <input id="file-upload" ref={inputFile} type="file" onChange={(e) => {
+                                    let file = e.target.files[0];
+                                    if (file) {
+                                        setImageUrl(URL.createObjectURL(file));
+                                        setTargetFile(file);
+                                        toggleUploadMode(true);
+                                    }
+                                }} onSubmit={(e) => {
+                                    e.preventDefault();
+        
+                                }} />
+                                {uploadMode ? (
+                                    <button className="blank" id="upload-btn" title="Upload image" onClick={(e) => {
+                                        e.preventDefault();
+                                    }}>
+                                        {showConfirmation ? (
+                                            <div className="cfab">
+                                                <div className="loader">
+                                                    <Lottie options={confOptions} width="30px" height="auto" />
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="cfab" onClick={(e) => {
+                                                e.preventDefault();
+                                                let spotifyId = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).id : null;
+                                                if (spotifyId && targetFile) {
+                                                    uploadImage(targetFile, spotifyId);
+                                                }
+                                            }}>
+                                                <img src={uploadIcon} alt="upload" width="30px" height="30px"></img>
+                                                <i style={{marginTop: "10px"}}>Tap to Upload</i>
+                                            </div>
+                                        )}
+                                        <div className="dfab" style={{position: "absolute", top: "10px", right: "10px"}} onClick={(e) => {
+                                                e.stopPropagation();
+                                                e.preventDefault();
+                                                toggleUploadMode(false);
+                                                toggleShowConfirmation(false);
+                                                setImageUrl(null);
+                                            }}>
+                                            <img src={closeIcon} alt="close" title="Close" width="20px" height="20px"></img>
+                                        </div>
+                                    </button>
+                                ) : (
+                                    <button className="blank" id="upload-btn" title="Choose image to upload" onClick={(e) => {
+                                        e.preventDefault();
+                                        if (formData.cover) setFormData({...formData, cover: ""});
+                                        inputFile.current.click();
+                                    }}>
+                                        <div className="cfab">
+                                            <img src={addIcon} alt="add" width="30px" height="30px"></img>
+                                            <i style={{marginTop: "10px"}}>Add your own</i>
+                                        </div>
+                                    </button>
+                                )}
+                                <img src={formData.cover ? formData.cover : imageUrl} alt="" id="custom-img" title="Album cover" width="325px" height="auto" 
+                                style={{borderRadius: "2px", zIndex: 10}} 
+                                onError={() => {
+                                    document.getElementById("custom-img").style.display = "none";
+                                }}></img>
+                            </div>
                         ) : (null)}
                         <label htmlFor="mixName">Name</label>
                         <input type="text" id="mixName" name="mixName" spellCheck="false" 
@@ -179,7 +277,7 @@ const Profile = () => {
                     <img src={closeIcon} className="close" alt="close" title="Close" width="20px" height="20px" onClick={() => {
                         toggleShowPanel(false);
                     }}></img>
-                    <input type="text" id="genre-search-bar" autoComplete="off" placeholder="Search for a genre.." value={searchValue} onChange={(e) => {
+                    <input type="text" id="genre-search-bar" autoComplete="off" placeholder="Search for a genre.." value={searchValue} onInput={(e) => {
                         setSearchValue(e.target.value);
                     }} />
                     <div className="mixGenres" style={{height: "170px"}}>
@@ -208,6 +306,9 @@ const Profile = () => {
                         </div>
                     ) : (null)}
                 </div>
+            ) : (null)}
+            {errorText ? (
+                <Error text={errorText} />
             ) : (null)}
         </div>
     );
