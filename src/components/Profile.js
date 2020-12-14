@@ -84,7 +84,7 @@ const Profile = () => {
     const uploadImage = async (file, spotifyId) => {
         const fData = new FormData();
         fData.append("image", file);
-        await axios.post(`http://localhost:8081/users/${spotifyId}/images/upload`, fData).then((res) => {
+        await axios.post(`${SERVER_URL}users/${spotifyId}/images/upload`, fData).then((res) => {
             if (res.data.uri) {
                 setFormData({...formData, cover: res.data.uri});
                 setImageUrl(null);
