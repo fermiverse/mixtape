@@ -110,7 +110,7 @@ const MixForm = ({mixProps, setMixProps}) => {
                     }}></input>
                     <p style={{textAlign: "center", color: "rgb(150,150,150)", margin: 0, fontSize: "12.5px"}}>OR</p>
                     <div id="upload">
-                        <input id="file-upload" ref={inputFile} type="file" accept="image/png, image/jpeg" onChange={(e) => {
+                        <input id="file-upload" ref={inputFile} type="file" onChange={(e) => {
                             let file = e.target.files[0];
                             if (file) {
                                 setImageUrl(URL.createObjectURL(file));
