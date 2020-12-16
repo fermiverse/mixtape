@@ -13,6 +13,12 @@ const returnPath = (path) => {
     return "/"
 };
 
+const getTitleString = (title) => {
+    if (title && title.length > 20) return title.slice(0, 20) + "..";
+    else if (title && title.length <= 20) return title;
+    else return null;
+};
+
 const TopBar = ({type, history, showDescription, toggleShowDescription, title, notifs, retPath, isPlaying}) => {
     let device_id = localStorage.getItem("device_id");
     let access_token = localStorage.getItem("token");
@@ -38,7 +44,7 @@ const TopBar = ({type, history, showDescription, toggleShowDescription, title, n
                     else history.push(returnPath("/menu"));
                 }
             }}></img>
-            <p id="title">{title}</p>
+            <p id="title">{getTitleString(title)}</p>
             {type === "nav" ? (
                 <img id="lmix" src={mixIcon} alt="mix" title="Mixtape" width="28px" onClick={() => {
                     if (title) history.push(returnPath("/ship"));
