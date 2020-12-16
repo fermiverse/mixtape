@@ -89,7 +89,7 @@ const MixForm = ({mixProps, setMixProps}) => {
                     <label htmlFor="mixName">Name</label>
                     <input type="text" id="mixName" name="mixName" spellCheck="false" 
                     placeholder="Give your mix a personal name..." required={true} autoComplete="off" style={{textTransform: "capitalize"}} 
-                    maxLength={20} value={mixProps.name ? mixProps.name : ""} onChange={(e) => {
+                    maxLength={50} value={mixProps.name ? mixProps.name : ""} onChange={(e) => {
                         setMixProps({...mixProps, name: e.target.value});
                     }}></input>
                     <label htmlFor="mixDescription">Description</label>
