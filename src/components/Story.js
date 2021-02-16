@@ -4,17 +4,52 @@ import closeIcon from '../graphics/cancel.svg';
 import backIcon from '../graphics/back.svg';
 let converter = require('number-to-words');
 
+const getDayCount = (month) => {
+    let retVal;
+    switch (month) {
+        case 1:
+            retVal = 28;
+            break;
+        case 0:
+        case 2: 
+        case 4: 
+        case 6: 
+        case 7: 
+        case 9: 
+        case 11:
+            retVal = 31;
+            break;
+        default:
+            retVal = 30;
+            break;
+    }
+    return retVal;
+};
+
 const durationString = () => {
-    let baseDate = new Date(2020, 9, 10);
+    //let baseDate = new Date(2020, 9, 10);
     let currentDate = new Date();
-    let msDiff = currentDate - baseDate;
-    let days = Math.floor(msDiff / (1000 * 60 * 60 * 24));
-    let months = Math.floor(days / 30);
-    days = days % 30;
-    let monthString = months > 0 ? converter.toWords(months) + " " + (months > 1 ? "months" : "month") : "";
-    let dayString = days > 0 ? converter.toWords(days) + " " + (days > 1 ? "days" : "day") : "";
-    if (dayString) return monthString + " and " + dayString
-    else return monthString 
+    let [y1, m1, d1] = [2020, 9, 10];
+    let y2 = currentDate.getFullYear();
+    let m2 = currentDate.getMonth();
+    let d2 = currentDate.getDate();
+    let dDiff = d2 - d1;
+    let mDiff = m2 - m1; 
+    let yDiff = y2 - y1;
+    if (mDiff < 0) {
+        yDiff = yDiff - 1;
+        mDiff = mDiff + 12;
+        if (dDiff < 0) {
+            mDiff = mDiff - 1;
+            dDiff = dDiff + getDayCount(m2);
+        }
+    };
+    let yearString = yDiff > 0 ? converter.toWords(yDiff) + " " + (yDiff > 1 ? "years" : "year") : "";
+    let monthString = mDiff > 0 ? converter.toWords(mDiff) + " " + (mDiff > 1 ? "months" : "month") : "";
+    let dayString = dDiff > 0 ? converter.toWords(dDiff) + " " + (dDiff > 1 ? "days" : "day") : "";
+    let outArr = [yearString, monthString, dayString].filter(e => e !== "");
+    if (outArr.length === 3) return yearString + ", " + monthString + " and " + dayString;
+    else return outArr.join(" and ");
 };
 
 const getRandomFact = () => {
@@ -32,7 +67,7 @@ const getRandomFact = () => {
         "She's all about organic and sustainable living",
         "She can randomly break into song and dance in the middle of conversations",
         "TMI, click below"
-    ]
+    ];
     let x = Math.random();
     let randIndex = Math.floor(x * (facts.length - 1));
     return facts[randIndex];
