@@ -5,6 +5,7 @@ import Home from './components/Home';
 import Menu from './components/Menu';
 import MixForm from './components/MixForm';
 import Mixtape from './components/Mixtape';
+import Note from './components/Note';
 import Player from './components/Player';
 import Profile from './components/Profile';
 import Search from './components/Search';
@@ -46,6 +47,9 @@ function App() {
           )} />
           <Route path="/sharing" render={(props) => (
             <Sharing {...props} />
+          )} />
+          <Route path="/note" render={(props) => (
+            <Note {...props} />
           )} />
           <Redirect from="*" to="/"></Redirect>
         </Switch>
