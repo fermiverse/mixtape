@@ -1,12 +1,12 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+/* import { useHistory } from 'react-router-dom';
 import uuidv4 from 'react-uuid';
 import casetteImage from '../graphics/mix.svg';
 import aboutIcon from '../graphics/about.svg';
 import storyIcon from '../graphics/story.svg';
-import gitIcon from '../graphics/github.svg';
+import gitIcon from '../graphics/github.svg'; */
 
-const queryString = (options) => {
+/* const queryString = (options) => {
     let {client_id, response_type, redirect_uri, state} = options
     return (
         `https://accounts.spotify.com/authorize?`
@@ -16,9 +16,9 @@ const queryString = (options) => {
         + `&state=${state}`
         + `&scope=streaming user-read-playback-state user-modify-playback-state user-read-email user-read-private playlist-modify-public playlist-modify-private`
     )
-}
+} */
 
-const authorize = () => {
+/* const authorize = () => {
     const options = {
         client_id: "8ce69e43f7bc4fc68b3197dc60f1a821",
         response_type: "token",
@@ -26,15 +26,18 @@ const authorize = () => {
         state: uuidv4()
     };
     window.location = queryString(options);
-};
+}; */
 
 const Pane = () => {
 
-    const history = useHistory();
+    /* const history = useHistory(); */
 
     return ( 
         <div className="pane">
             <div style={{position: "absolute", top: "30px"}}>
+                <div id="msg">We're currently under maintenance</div>
+            </div>
+            {/* <div style={{position: "absolute", top: "30px"}}>
                 <h1 id="main">mixtape</h1>
                 <div id="msg">A fun way of celebrating equations</div>
             </div>
@@ -74,7 +77,7 @@ const Pane = () => {
             <button id="spot" onClick={(e) => {
                 authorize();
             }}>Connect Spotify</button>
-            <p className="info">To use Mixtape, connect a valid Spotify account</p>
+            <p className="info">To use Mixtape, connect a valid Spotify account</p> */}
         </div>
     );
 }

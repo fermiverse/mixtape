@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Route, BrowserRouter, Switch, Redirect } from 'react-router-dom';
-import About from './components/About';
+import React from 'react';
+import { Route, BrowserRouter, Switch } from 'react-router-dom';
+/* import About from './components/About'; */
 import Home from './components/Home';
-import Menu from './components/Menu';
+/* import Menu from './components/Menu';
 import MixForm from './components/MixForm';
 import Mixtape from './components/Mixtape';
 import Note from './components/Note';
@@ -10,18 +10,18 @@ import Player from './components/Player';
 import Profile from './components/Profile';
 import Search from './components/Search';
 import Sharing from './components/Sharing';
-import Story from './components/Story';
+import Story from './components/Story'; */
 
 function App() {
-  let currentMix = localStorage.getItem("currentMix") ? JSON.parse(localStorage.getItem("currentMix")) : {name: "", description: "", cover: "", tracks: []};
-  const [mixProps, setMixProps] = useState(currentMix);
+  /* let currentMix = localStorage.getItem("currentMix") ? JSON.parse(localStorage.getItem("currentMix")) : {name: "", description: "", cover: "", tracks: []}; */
+  /* const [mixProps, setMixProps] = useState(currentMix); */
 
   return (
     <BrowserRouter>
       <div className="App">
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route exact path="/menu" render={(props) => (
+         {/*  <Route exact path="/menu" render={(props) => (
             <Menu {...props} mixProps={mixProps} setMixProps={setMixProps} />
           )} />
           <Route exact path="/play" render={(props) => (
@@ -51,7 +51,7 @@ function App() {
           <Route path="/note" render={(props) => (
             <Note {...props} />
           )} />
-          <Redirect from="*" to="/"></Redirect>
+          <Redirect from="*" to="/"></Redirect> */}
         </Switch>
       </div>
     </BrowserRouter>
